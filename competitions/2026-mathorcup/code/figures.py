@@ -160,15 +160,23 @@ def _diag_dir(ax):
 
 
 def _pcolormesh(ax, M, x_labels, y_labels, cmap, cbar_label=None, vmin=None,
-                vmax=None, annotate=False, fmt='{:.2f}', annot_fontsize=7):
+                vmax=None, annotate=False, fmt='{:.2f}', annot_fontsize=7,
+                norm=None):
     """用 pcolormesh 画热力图。
 
     不用 make_heatmap 的原因：它内部走 ax.imshow，SVG 导出时会把整张图内嵌成
     base64 位图（实测 2 张旧图不可编辑）。pcolormesh 是真正的矢量网格。
+
+    norm 给了就用它（pcolormesh 不允许同时传 norm 和 vmin/vmax），
+    标注字的黑白判定也走同一个 norm，否则颜色和字色会对不上。
     """
     M = np.asarray(M, dtype=float)
-    mesh = ax.pcolormesh(M, cmap=cmap, vmin=vmin, vmax=vmax,
-                         edgecolors='none', shading='flat', rasterized=False)
+    if norm is not None:
+        mesh = ax.pcolormesh(M, cmap=cmap, norm=norm, edgecolors='none',
+                             shading='flat', rasterized=False)
+    else:
+        mesh = ax.pcolormesh(M, cmap=cmap, vmin=vmin, vmax=vmax,
+                             edgecolors='none', shading='flat', rasterized=False)
     ax.set_xlim(0, M.shape[1])
     ax.set_ylim(M.shape[0], 0)                 # y 轴翻转：第 0 行在顶部
     ax.set_xticks(np.arange(M.shape[1]) + 0.5)
@@ -178,9 +186,10 @@ def _pcolormesh(ax, M, x_labels, y_labels, cmap, cbar_label=None, vmin=None,
     ax.set_frame_on(False)
     ax.tick_params(length=0)
     if annotate:
-        norm = matplotlib.colors.Normalize(
-            vmin=M.min() if vmin is None else vmin,
-            vmax=M.max() if vmax is None else vmax)
+        if norm is None:
+            norm = matplotlib.colors.Normalize(
+                vmin=M.min() if vmin is None else vmin,
+                vmax=M.max() if vmax is None else vmax)
         for (i, j), val in np.ndenumerate(M):
             r, g, b, _ = cmap(norm(val))
             ax.text(j + 0.5, i + 0.5, fmt.format(val), ha='center', va='center',
@@ -644,9 +653,15 @@ def fig_q2_pi_heatmap():
 
     # 宽扁版式：宽 6.5in = 468pt，落 \textwidth 后缩放 0.969（>0.95），字不会变小
     fig, ax = plt.subplots(figsize=(6.5, 4.9))
+    # π 的分布极偏：中位 0.035、67% 的格子 <0.1，而最大到 1.0。线性色标下这
+    # 六成多的格子全挤在最暗的 10% 色带里，看上去一模一样。改用幂律归一化
+    # （gamma 0.4）：0.035 从色带的 3.5% 抬到 26%，低值区才分得开；数值本身
+    # 一个没动，标注仍然是原始 π。
     mesh = _pcolormesh(ax, Vk, feats_kept, sens_kept, CMAP_SEQ,
-                       cbar_label='逐列置换重要性 $\\pi$', vmin=0.0,
-                       annotate=True, fmt='{:.2f}', annot_fontsize=5.6)
+                       cbar_label='逐列置换重要性 $\\pi$',
+                       annotate=True, fmt='{:.2f}', annot_fontsize=5.6,
+                       norm=matplotlib.colors.PowerNorm(
+                           gamma=0.4, vmin=0.0, vmax=float(Vk.max())))
     ax.tick_params(axis='x', labelsize=6.4, rotation=90)
     ax.tick_params(axis='y', labelsize=6.8)
     for lbl in ax.get_xticklabels():
