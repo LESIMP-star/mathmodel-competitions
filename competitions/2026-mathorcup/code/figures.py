@@ -1011,8 +1011,13 @@ def fig_q3_surrogate_err():
     ax.scatter(s.err_max_over_sd, y, s=44, color=C_WARN, marker='s',
                edgecolor='white', linewidth=0.6, zorder=3)
     ax.axvline(1.0, color=C_DEEP, linestyle='--', linewidth=1.2)
-    ax.text(1.05, len(s) - 0.6, '误差 = 1 倍标准差\n（超过即不可分）', fontsize=9,
-            color=C_DEEP, va='top')
+    # C-3：参考线不要在图上写字。这段说明原来放在 (1.05, len-0.6)，直接压在
+    # 最上面两行（A_esters_all 4.4、X4vg 4.25）的棒棒糖线上，还紧贴参考线。
+    # 改成图例条目放到轴外上方——15 行全部铺满 0–4.4，轴内没有不压线的位置。
+    ax.legend(handles=[Line2D([], [], color=C_DEEP, ls='--', lw=1.2,
+                              label='误差 = 1 倍标准差（超过即不可分）')],
+              loc='lower right', bbox_to_anchor=(1.0, 1.01), fontsize=9,
+              frameon=False, borderaxespad=0.2)
     ax.set_yticks(y)
     ax.set_yticklabels(s.sens.tolist(), fontsize=9)
     ax.set_xlabel('代理误差上界 / 该维标准差', fontsize=10.5)
