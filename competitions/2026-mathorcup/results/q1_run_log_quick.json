@@ -1,0 +1,23 @@
+{
+  "n_samples": 250,
+  "n_features": 226,
+  "n_targets": 50,
+  "outer": 3,
+  "inner": 3,
+  "n_boot": 1000,
+  "seed": 2026,
+  "hurdle_thr": 0.3,
+  "n_hurdle_targets": 9,
+  "median_R2": 0.1327,
+  "mean_R2": 0.1973,
+  "n_R2_positive": 47,
+  "best_target": "alcohol",
+  "best_R2": 0.6873,
+  "worst_target": "F_hops_tropical",
+  "worst_R2": -0.0933,
+  "median_boot_width": 0.1934,
+  "duration_s": 91.1,
+  "quick": true,
+  "ext_median_rho_pred_vs_7": 0.3034,
+  "ext_median_rho_label_vs_7": 0.3005
+}

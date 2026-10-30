@@ -1,0 +1,53 @@
+%==============================================================================
+% 附录：支撑材料与源程序
+%==============================================================================
+\subsection*{A.1\quad 复现环境}
+
+全部结果在同一台 Windows 主机上生成：Python 3.13（Anaconda 发行版），数值与建模依赖 numpy、pandas、scipy、scikit-learn、lightgbm，优化依赖 Gurobi 13.0.2（NODE 许可）。论文用 TeX Live 2026 的 xelatex 编译两遍。随机种子统一为 2026，自助重采样次数在问题一为 1000、问题二为 200。
+
+\subsection*{A.2\quad 运行顺序}
+
+在工程根目录依次执行下列命令，即可从附件复现全部结果与插图：结果写入 \texttt{results/}，插图写入 \texttt{latex模板/figures/}。
+
+\begin{lstlisting}[language=bash]
+export OPENBLAS_NUM_THREADS=1 PYTHONIOENCODING=utf-8
+python code/q0_relations.py
+python code/q1.py
+python code/q1_grades.py
+python code/q1_diagnostics.py
+python code/q2.py
+python code/q2_graph.py
+python code/q3.py
+python code/q3_transfer.py
+python code/robustness_q3.py
+python code/figures.py
+python code/make_indexes.py
+cd latex模板 && xelatex main.tex && xelatex main.tex
+\end{lstlisting}
+
+\subsection*{A.3\quad 支撑材料结构}
+
+完整源码、中间结果与插图随支撑材料交付，目录结构与用途见表~\ref{tab:support}。论文中的每一个数字都能在 \texttt{results/} 下找到对应的 CSV 或 JSON 源文件，\texttt{audit\_paper.py} 会自动核对正文声明与结果文件是否一致（当前 126 项全部通过）。
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{支撑材料的目录结构}
+\label{tab:support}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}p{2.4cm}p{8.2cm}p{3.0cm}@{}}
+\toprule
+\textbf{路径} & \textbf{内容} & \textbf{规模} \\
+\midrule
+\texttt{code/} & 全部 Python 脚本，含 A.5 所列核心脚本与绘图、审计辅助脚本 & 21 个文件 \\
+\texttt{results/} & 全部中间结果，论文数字的溯源依据 & 90 个 CSV/JSON \\
+\texttt{figures/} & 论文插图 & 21 张图，PNG 与 SVG \\
+\texttt{附件/} & 赛题原始数据 1--8 & 9 个文件 \\
+\texttt{README.md} & 复现步骤、环境、数据陷阱、公式与函数对应表 & -- \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\subsection*{A.4\quad 核心实现}
+
+完整源码共 21 个脚本、7565 行，随支撑材料交付（\texttt{支撑材料/code/}）。本节只摘出与正文公式逐一对应的实现片段，按所对应公式的顺序排列，每段引导句标明公式编号与源文件行号。
+

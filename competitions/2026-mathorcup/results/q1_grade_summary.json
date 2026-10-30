@@ -1,0 +1,55 @@
+{
+  "n_samples": 250,
+  "n_dims": 50,
+  "n_grades": 7,
+  "main_prior": "zeroinfl",
+  "code_source": "队友 q1_model.py:43-71（PRIORS / quantile_to_grade / qwk，原样照搬）",
+  "priors": {
+    "uniform": [
+      0.14285714285714285,
+      0.14285714285714285,
+      0.14285714285714285,
+      0.14285714285714285,
+      0.14285714285714285,
+      0.14285714285714285,
+      0.14285714285714285
+    ],
+    "zeroinfl": [
+      0.5,
+      0.18,
+      0.12,
+      0.09,
+      0.06,
+      0.035,
+      0.015
+    ],
+    "mildzero": [
+      0.35,
+      0.2,
+      0.16,
+      0.13,
+      0.09,
+      0.05,
+      0.02
+    ]
+  },
+  "median_qwk": 0.34,
+  "mean_qwk": 0.4002,
+  "median_acc": 0.39,
+  "median_acc_pm1": 0.672,
+  "median_mae_grade": 1.208,
+  "median_tv_dist": 0.0,
+  "n_qwk_gt_0p3": 34,
+  "best_dim": "lactic",
+  "best_qwk": 0.7414,
+  "worst_dim": "overall",
+  "worst_qwk": 0.1531,
+  "median_qwk_uniform": 0.3812,
+  "median_qwk_mildzero": 0.3599,
+  "median_qwk_equifreq": 0.377,
+  "median_acc_equifreq": 0.216,
+  "median_qwk_round": 0.1244,
+  "median_acc_round": 0.406,
+  "median_frac_round_at_zero": 0.532,
+  "limitation": "附件4 无 0–6 真值，QWK/准确率均为同一映射内的往返一致性，衡量预测分与标签分的同档比例，不是对面板真值的绝对精度；实测每列最高频取值仅占 1.8%、等于列最小值仅 0.88%，说明标签已中心化并加噪，零膨胀结构无法从数据直接验证，故先验取自感官评价文献而非拟合；换先验后 QWK 的变动（uniform 0.3812 vs zeroinfl 0.3400）即映射假设的影响幅度。"
+}

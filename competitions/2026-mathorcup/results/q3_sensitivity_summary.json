@@ -1,0 +1,20 @@
+{
+  "style": "Tripel",
+  "n_style": 28,
+  "n_decision": 75,
+  "pls_components": 2,
+  "shrinkage_delta": 0.7242,
+  "base_params": {
+    "k_max": 25,
+    "gamma": 1.0,
+    "lam": 0.1,
+    "eps2": 0.001,
+    "eps3": 7.452
+  },
+  "base_f1": 13.785204,
+  "n_runs": 27,
+  "dominant_param": "改动列代价 γ",
+  "dominant_span": 13.343781,
+  "duration_s": 6.6,
+  "note": "每次扰动均重新求解 MILP，无解析近似"
+}

@@ -1,0 +1,151 @@
+﻿sens,rank,feat,origin_group,pi,pi_thr,passes_pi,n_models_top10,cross_model_rank,is_physicochem,is_internal_std,oav_median,oav_p95,threshold,scale,grade
+A_malt_all,1,X2.acetylfuran,Malt,0.5333,0.5022,True,0,123.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_all,2,octyl_acetate,Yeast,0.4667,0.5022,False,1,72.3,False,False,0.0048,0.0309,0.5,log10,C 统计显著但 OAV 远低（需化学论证）
+A_malt_all,3,MeSH,Yeast,0.3667,0.5022,False,1,128.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_grain,1,X5.methylfurfural,Malt,0.4667,0.5022,False,1,34.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_grain,2,terpinen.4.ol,Spices,0.4667,0.5022,False,1,78.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_grain,3,X4.ethyl.phenol,Wild flora,0.4,0.5022,False,1,67.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_bread,1,terpinen.4.ol,Spices,0.3667,0.5022,False,0,113.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_bread,2,alpha.humulene,Hops,0.3333,0.5022,False,1,63.7,False,False,0.019,0.1812,0.625,linear,C 统计显著但 OAV 远低（需化学论证）
+A_malt_bread,3,X2.acetylpyrrole,Malt,0.2667,0.5022,False,2,72.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_cara,1,acetic_acid.g.L.,Wild flora,0.5,0.5022,False,1,79.0,False,False,1.2121,5.4385,0.14025,log10,A 统计显著且 OAV>1
+A_malt_cara,2,X9.epi..E..caryophyllene,Hops,0.4333,0.5022,False,0,170.7,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_cara,3,X2.methyl.benzofuran,Malt,0.3333,0.5022,False,1,70.7,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_burn,1,methylpyrazine,Malt,0.5667,0.5022,True,2,18.7,False,False,0.0003,0.0163,1.0,linear,C 统计显著但 OAV 远低（需化学论证）
+A_malt_burn,2,X2.acetylfuran,Malt,0.2,0.5022,False,1,60.7,False,False,,,,,N 无阈值（无法判 OAV）
+A_malt_burn,3,cumin.aldehyde,Spices,0.2,0.5022,False,0,95.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_all,1,DMS,Malt,0.8667,0.5022,True,2,6.7,False,False,1.4049,4.3719,17.25,log10,A 统计显著且 OAV>1
+A_hops_all,2,ethyl_octanoate,Yeast,0.7333,0.5022,True,2,32.7,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+A_hops_all,3,lactic_acid.mg.L.,Wild flora,0.4667,0.5022,False,3,5.7,False,False,0.3324,5.5019,416.6666667,log10,C 统计显著但 OAV 远低（需化学论证）
+A_hops_citrus,1,isopropyl.tetradecanoate,Yeast,0.3667,0.5022,False,0,84.7,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_citrus,2,ethyl.furoate,Malt,0.3,0.5022,False,0,126.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_citrus,3,X6.methyl.5.hepten.2.one,Yeast,0.2667,0.5022,False,1,33.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_tropical,1,DMS,Malt,0.6333,0.5022,True,0,175.0,False,False,1.4049,4.3719,17.25,log10,A 统计显著且 OAV>1
+A_hops_tropical,2,isopentyl.butanoate,Yeast,0.5,0.5022,False,1,90.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_tropical,3,n.hexanol,Yeast,0.3667,0.5022,False,1,99.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_noble,1,ethyl_octanoate,Yeast,0.9333,0.5022,True,2,7.3,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+A_hops_noble,2,ethyl_decanoate,Yeast,0.4667,0.5022,False,1,34.3,False,False,0.1083,0.3921,1.035,log10,C 统计显著但 OAV 远低（需化学论证）
+A_hops_noble,3,DMS,Malt,0.3333,0.5022,False,1,26.7,False,False,1.4049,4.3719,17.25,log10,A 统计显著且 OAV>1
+A_hops_woody,1,alloaromadendrene.epoxide,Hops,0.6333,0.5022,True,2,23.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_woody,2,X.E..ortho.methoxy.cinnamaldehyde,Spices,0.3333,0.5022,False,1,18.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_hops_woody,3,car.3.en.2.one,Hops,0.3333,0.5022,False,0,69.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_all,1,n.hexanol,Yeast,0.9667,0.5022,True,1,77.0,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_all,2,isopentyl_acetate,Yeast,0.5333,0.5022,True,1,45.3,False,False,3.6154,10.9156,0.603333333,log10,A 统计显著且 OAV>1
+A_esters_all,3,acetaldehyde,Yeast,0.4667,0.5022,False,0,81.0,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+A_esters_ethac,1,ethyl_acetate,Yeast,0.5333,0.5022,True,2,68.0,False,False,1.1524,2.2309,24.0,log10,A 统计显著且 OAV>1
+A_esters_ethac,2,phenethyl_alcohol,Yeast,0.5,0.5022,False,0,103.0,False,False,0.2487,0.7307,35.01,log10,C 统计显著但 OAV 远低（需化学论证）
+A_esters_ethac,3,X2.methyl.1.butanol,Yeast,0.3667,0.5022,False,1,57.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_isoaa,1,isopentyl_acetate,Yeast,0.9,0.5022,True,3,5.0,False,False,3.6154,10.9156,0.603333333,log10,A 统计显著且 OAV>1
+A_esters_isoaa,2,n.hexanol,Yeast,0.8333,0.5022,True,1,11.7,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_isoaa,3,ethyl_decanoate,Yeast,0.5,0.5022,False,0,204.7,False,False,0.1083,0.3921,1.035,log10,C 统计显著但 OAV 远低（需化学论证）
+A_esters_flower,1,ethyl.lactate,Others,0.5667,0.5022,True,0,59.7,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_flower,2,n.hexanol,Yeast,0.5,0.5022,False,1,72.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_flower,3,phenylacetaldehyde,Others,0.4667,0.5022,False,0,106.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_fruity,1,beta.phellandrene,Hops,0.8667,0.5022,True,3,2.3,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_fruity,2,X.E..alpha.ionone,Hops,0.5,0.5022,False,0,127.5,False,False,,,,,N 无阈值（无法判 OAV）
+A_esters_fruity,3,eugenol,Spices,0.4333,0.5022,False,0,94.8,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_all,1,acetaldehyde,Yeast,0.7,0.5022,True,3,7.0,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+F_malt_all,2,methylpyrazine,Malt,0.4667,0.5022,False,0,120.7,False,False,0.0003,0.0163,1.0,linear,C 统计显著但 OAV 远低（需化学论证）
+F_malt_all,3,X.E..alpha.ionone,Hops,0.4,0.5022,False,2,9.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_grain,1,n.heptanol,Yeast,0.3667,0.5022,False,1,78.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_grain,2,terpinen.4.ol.acetate,Hops,0.3667,0.5022,False,0,202.3,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_grain,3,isoborneol,Others,0.3333,0.5022,False,0,161.3,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_bread,1,X2.acetylpyrrole,Malt,0.7667,0.5022,True,0,158.3,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_bread,2,terpinen.4.ol.acetate,Hops,0.3333,0.5022,False,1,40.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_bread,3,ethyl.phenylacetate,Yeast,0.3333,0.5022,False,1,63.7,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_cara,1,acetaldehyde,Yeast,0.8,0.5022,True,2,9.7,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+F_malt_cara,2,methylpyrazine,Malt,0.4333,0.5022,False,1,89.3,False,False,0.0003,0.0163,1.0,linear,C 统计显著但 OAV 远低（需化学论证）
+F_malt_cara,3,ethyl.tetradecanoate,Yeast,0.3,0.5022,False,0,31.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_burn,1,methylpyrazine,Malt,0.4,0.5022,False,1,24.0,False,False,0.0003,0.0163,1.0,linear,C 统计显著但 OAV 远低（需化学论证）
+F_malt_burn,2,ambroxide,Spices,0.3,0.5022,False,0,132.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_malt_burn,3,X2.furanmethanol,Others,0.2667,0.5022,False,0,74.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_all,1,ethyl_octanoate,Yeast,0.9,0.5022,True,1,27.7,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+F_hops_all,2,cis.dihydro.beta.terpineol,Hops,0.7333,0.5022,True,2,57.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_all,3,DMS,Malt,0.4667,0.5022,False,2,7.3,False,False,1.4049,4.3719,17.25,log10,A 统计显著且 OAV>1
+F_hops_citrus,1,alpha.terpinyl.isobutanoate,Hops,0.5,0.5022,False,0,137.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_citrus,2,phenethyl_alcohol,Yeast,0.4667,0.5022,False,0,155.0,False,False,0.2487,0.7307,35.01,log10,C 统计显著但 OAV 远低（需化学论证）
+F_hops_citrus,3,methylpyrazine,Malt,0.3667,0.5022,False,0,144.0,False,False,0.0003,0.0163,1.0,linear,C 统计显著但 OAV 远低（需化学论证）
+F_hops_tropical,1,nerol.oxide,Hops,0.6,0.5022,True,0,99.7,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_tropical,2,n.hexanol,Yeast,0.5667,0.5022,True,0,73.7,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_tropical,3,DMS,Malt,0.4,0.5022,False,0,174.7,False,False,1.4049,4.3719,17.25,log10,A 统计显著且 OAV>1
+F_hops_noble,1,ethyl_octanoate,Yeast,0.9,0.5022,True,0,121.3,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+F_hops_noble,2,nerol,Hops,0.4333,0.5022,False,2,38.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_noble,3,citronellol,Hops,0.4,0.5022,False,3,6.3,False,False,8.7891,100.1506,0.0245,linear,A 统计显著且 OAV>1
+F_hops_woody,1,isobutanol,Yeast,0.8333,0.5022,True,2,59.7,False,False,0.138,0.2762,80.0,log10,C 统计显著但 OAV 远低（需化学论证）
+F_hops_woody,2,X2.furanmethanol,Others,0.4333,0.5022,False,0,98.7,False,False,,,,,N 无阈值（无法判 OAV）
+F_hops_woody,3,terpinen.4.ol.acetate,Hops,0.3333,0.5022,False,1,13.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_all,1,n.hexanol,Yeast,0.7667,0.5022,True,1,57.3,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_all,2,acetaldehyde,Yeast,0.7667,0.5022,True,2,72.7,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+F_esters_all,3,ethyl_acetate,Yeast,0.7667,0.5022,True,1,79.3,False,False,1.1524,2.2309,24.0,log10,A 统计显著且 OAV>1
+F_esters_ethac,1,ethyl_acetate,Yeast,0.7333,0.5022,True,2,26.0,False,False,1.1524,2.2309,24.0,log10,A 统计显著且 OAV>1
+F_esters_ethac,2,Z.Z.geranyl.linalool,Hops,0.6,0.5022,True,0,180.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_ethac,3,acetaldehyde,Yeast,0.4333,0.5022,False,0,123.7,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+F_esters_isoaa,1,isopentyl_acetate,Yeast,0.6667,0.5022,True,2,28.7,False,False,3.6154,10.9156,0.603333333,log10,A 统计显著且 OAV>1
+F_esters_isoaa,2,n.hexanol,Yeast,0.4,0.5022,False,0,54.0,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_isoaa,3,isobutyl_acetate,Yeast,0.3333,0.5022,False,0,44.0,False,False,0.0714,0.1919,1.0,log10,C 统计显著但 OAV 远低（需化学论证）
+F_esters_flower,1,phenylacetaldehyde,Others,0.5,0.5022,False,2,56.3,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_flower,2,DES,Yeast,0.4667,0.5022,False,3,5.3,False,False,0.5113,2.0339,1.2,log10,B 统计显著、OAV 接近阈值
+F_esters_flower,3,eucalyptol,Hops,0.4,0.5022,False,1,24.7,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_fruity,1,X1.10.di.epi.cubenol,Hops,0.6333,0.5022,True,3,4.7,False,False,,,,,N 无阈值（无法判 OAV）
+F_esters_fruity,2,acetic_acid.g.L.,Wild flora,0.5333,0.5022,True,0,60.0,False,False,1.2121,5.4385,0.14025,log10,A 统计显著且 OAV>1
+F_esters_fruity,3,X.E..alpha.ionone,Hops,0.4667,0.5022,False,1,117.3,False,False,,,,,N 无阈值（无法判 OAV）
+acidity,1,lactic_acid.mg.L.,Wild flora,1.0,0.5022,True,3,1.3,False,False,0.3324,5.5019,416.6666667,log10,C 统计显著但 OAV 远低（需化学论证）
+acidity,2,ethyl.phenylacetate,Yeast,0.9667,0.5022,True,1,27.3,False,False,,,,,N 无阈值（无法判 OAV）
+acidity,3,acetic_acid.g.L.,Wild flora,0.8333,0.5022,True,2,18.7,False,False,1.2121,5.4385,0.14025,log10,A 统计显著且 OAV>1
+bitternes,1,ethyl_octanoate,Yeast,1.0,0.5022,True,2,6.0,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+bitternes,2,butyl.acetate,Yeast,0.6667,0.5022,True,0,145.7,False,False,,,,,N 无阈值（无法判 OAV）
+bitternes,3,ethyl_decanoate,Yeast,0.4667,0.5022,False,1,20.7,False,False,0.1083,0.3921,1.035,log10,C 统计显著但 OAV 远低（需化学论证）
+sweetness,1,ethyl_decanoate,Yeast,0.6,0.5022,True,1,81.3,False,False,0.1083,0.3921,1.035,log10,C 统计显著但 OAV 远低（需化学论证）
+sweetness,2,pentyl.octanoate,Yeast,0.3667,0.5022,False,1,19.0,False,False,,,,,N 无阈值（无法判 OAV）
+sweetness,3,alpha.humulene,Hops,0.3333,0.5022,False,0,115.3,False,False,0.019,0.1812,0.625,linear,C 统计显著但 OAV 远低（需化学论证）
+X4vg,1,X4VG,Yeast,0.9667,0.5022,True,3,2.0,False,False,0.047,1.0491,0.206333333,log10,C 统计显著但 OAV 远低（需化学论证）
+X4vg,2,delta.terpinyl.acetate,Hops,0.9667,0.5022,True,2,5.7,False,False,,,,,N 无阈值（无法判 OAV）
+X4vg,3,X14.hydroxy.9.epi..E..caryophyllene,Hops,0.3333,0.5022,False,0,167.0,False,False,,,,,N 无阈值（无法判 OAV）
+diacetyl,1,eugenol,Spices,1.0,0.5022,True,1,63.0,False,False,,,,,N 无阈值（无法判 OAV）
+diacetyl,2,pentyl.octanoate,Yeast,0.5,0.5022,False,3,4.3,False,False,,,,,N 无阈值（无法判 OAV）
+diacetyl,3,lactic_acid.mg.L.,Wild flora,0.4333,0.5022,False,1,28.3,False,False,0.3324,5.5019,416.6666667,log10,C 统计显著但 OAV 远低（需化学论证）
+dms,1,n.decanol,Yeast,0.5,0.5022,False,2,48.0,False,False,,,,,N 无阈值（无法判 OAV）
+dms,2,E.nerolidol,Hops,0.5,0.5022,False,1,96.0,False,False,,,,,N 无阈值（无法判 OAV）
+dms,3,isomaltol,Malt,0.3667,0.5022,False,1,38.7,False,False,,,,,N 无阈值（无法判 OAV）
+metallic,1,alpha.calacorene,Hops,0.5,0.5022,False,2,62.3,False,False,,,,,N 无阈值（无法判 OAV）
+metallic,2,Z.Z.geranyl.linalool,Hops,0.4333,0.5022,False,0,92.0,False,False,,,,,N 无阈值（无法判 OAV）
+metallic,3,furfural,Malt,0.3,0.5022,False,0,71.0,False,False,0.0001,0.0021,60.0,linear,C 统计显著但 OAV 远低（需化学论证）
+stale_hops,1,alloaromadendrene.epoxide,Hops,0.5,0.5022,False,1,45.3,False,False,,,,,N 无阈值（无法判 OAV）
+stale_hops,2,linalool.isovalerate,Hops,0.4333,0.5022,False,0,93.0,False,False,,,,,N 无阈值（无法判 OAV）
+stale_hops,3,X.E..ortho.methoxy.cinnamaldehyde,Spices,0.3667,0.5022,False,2,17.3,False,False,,,,,N 无阈值（无法判 OAV）
+t2n,1,vinyl.caprylate,Yeast,0.5,0.5022,False,1,76.3,False,False,,,,,N 无阈值（无法判 OAV）
+t2n,2,H2S,Yeast,0.3667,0.5022,False,0,153.3,False,False,2.4254,5.2676,3.5,log10,A 统计显著且 OAV>1
+t2n,3,Z.nerolidol,Hops,0.3333,0.5022,False,1,88.0,False,False,0.0004,0.0044,25.0,linear,C 统计显著但 OAV 远低（需化学论证）
+orange,1,terpinen.4.ol,Spices,0.8333,0.5022,True,1,109.3,False,False,,,,,N 无阈值（无法判 OAV）
+orange,2,ethyl..E..linalool,Hops,0.7,0.5022,True,1,62.7,False,False,,,,,N 无阈值（无法判 OAV）
+orange,3,geraniol,Hops,0.6667,0.5022,True,0,34.7,False,False,4.3783,36.3663,0.0315,linear,A 统计显著且 OAV>1
+coriander,1,camphor,Spices,0.8667,0.5022,True,1,86.0,False,False,,,,,N 无阈值（无法判 OAV）
+coriander,2,ethyl..E..linalool,Hops,0.6333,0.5022,True,0,187.7,False,False,,,,,N 无阈值（无法判 OAV）
+coriander,3,geraniol,Hops,0.5,0.5022,False,2,80.3,False,False,4.3783,36.3663,0.0315,linear,A 统计显著且 OAV>1
+clove,1,linalool,Hops,0.7333,0.5022,True,2,6.7,False,False,13.583,357.3105,0.027285,linear,A 统计显著且 OAV>1
+clove,2,X4VG,Yeast,0.6,0.5022,True,1,139.3,False,False,0.047,1.0491,0.206333333,log10,C 统计显著但 OAV 远低（需化学论证）
+clove,3,cis.beta.terpineol,Hops,0.4667,0.5022,False,1,50.0,False,False,,,,,N 无阈值（无法判 OAV）
+lactic,1,lactic_acid.mg.L.,Wild flora,0.9667,0.5022,True,2,7.0,False,False,0.3324,5.5019,416.6666667,log10,C 统计显著但 OAV 远低（需化学论证）
+lactic,2,ethyl.phenylacetate,Yeast,0.8333,0.5022,True,2,70.7,False,False,,,,,N 无阈值（无法判 OAV）
+lactic,3,acetic_acid.g.L.,Wild flora,0.5667,0.5022,True,3,5.3,False,False,1.2121,5.4385,0.14025,log10,A 统计显著且 OAV>1
+acetic,1,lactic_acid.mg.L.,Wild flora,1.0,0.5022,True,3,1.7,False,False,0.3324,5.5019,416.6666667,log10,C 统计显著但 OAV 远低（需化学论证）
+acetic,2,acetic_acid.g.L.,Wild flora,0.9333,0.5022,True,3,2.3,False,False,1.2121,5.4385,0.14025,log10,A 统计显著且 OAV>1
+acetic,3,ethyl_isovalerate,Others,0.7667,0.5022,True,2,64.3,False,False,0.057,0.3799,0.1,log10,C 统计显著但 OAV 远低（需化学论证）
+barnyard,1,alloaromadendrene.epoxide,Hops,0.7,0.5022,True,1,44.3,False,False,,,,,N 无阈值（无法判 OAV）
+barnyard,2,acetaldehyde,Yeast,0.4,0.5022,False,0,79.0,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+barnyard,3,linalool.isovalerate,Hops,0.3333,0.5022,False,1,68.3,False,False,,,,,N 无阈值（无法判 OAV）
+alcohol,1,ethyl_octanoate,Yeast,0.8667,0.5022,True,1,88.7,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+alcohol,2,acetaldehyde,Yeast,0.7333,0.5022,True,1,10.7,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+alcohol,3,ethyl_acetate,Yeast,0.6,0.5022,True,1,21.0,False,False,1.1524,2.2309,24.0,log10,A 统计显著且 OAV>1
+aftertaste,1,acetaldehyde,Yeast,0.7333,0.5022,True,2,9.0,False,False,0.0821,0.2309,50.0,log10,C 统计显著但 OAV 远低（需化学论证）
+aftertaste,2,ethyl_isovalerate,Others,0.7,0.5022,True,1,43.7,False,False,0.057,0.3799,0.1,log10,C 统计显著但 OAV 远低（需化学论证）
+aftertaste,3,ethyl_octanoate,Yeast,0.6,0.5022,True,2,33.3,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+body,1,isobutanol,Yeast,0.5667,0.5022,True,0,152.7,False,False,0.138,0.2762,80.0,log10,C 统计显著但 OAV 远低（需化学论证）
+body,2,ethyl_octanoate,Yeast,0.5,0.5022,False,2,67.7,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+body,3,MeSH,Yeast,0.4333,0.5022,False,0,23.7,False,False,,,,,N 无阈值（无法判 OAV）
+co2,1,ethyl_octanoate,Yeast,0.8667,0.5022,True,2,9.0,False,False,0.7082,1.583,0.7,log10,B 统计显著、OAV 接近阈值
+co2,2,nerol,Hops,0.7,0.5022,True,2,6.0,False,False,,,,,N 无阈值（无法判 OAV）
+co2,3,ethyl_hexanoate,Yeast,0.4667,0.5022,False,2,19.7,False,False,1.0254,2.1602,0.23,log10,A 统计显著且 OAV>1
+overall,1,X2.ethyl.1.hexanol,Yeast,0.5667,0.5022,True,0,147.0,False,False,,,,,N 无阈值（无法判 OAV）
+overall,2,DMS,Malt,0.3667,0.5022,False,0,17.0,False,False,1.4049,4.3719,17.25,log10,A 统计显著且 OAV>1
+overall,3,dehydroxy.cis.linalool.oxide,Hops,0.3667,0.5022,False,0,51.3,False,False,,,,,N 无阈值（无法判 OAV）

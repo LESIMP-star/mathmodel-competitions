@@ -1,0 +1,6 @@
+﻿defect,domain,source_thr,thr_in_domain,before,after,delta,worsened,over_thr_after
+DMS,log10 域,att8,1.2367891,1.17934444,1.17934444,0.0,False,False
+X2.3.butanedione,mg/L,att8,0.29925,0.05695953,0.05695953,0.0,False,False
+X4VG,log10 域,att8,-0.68543061,-2.01315738,-2.01315738,0.0,False,False
+X.E..2.nonenal,mg/L（文献 0.11 µg/L）,literature,0.00011,0.00201172,0.00201172,0.0,False,True
+stale_hops,代理预测（感官）,n/a,0.252811,0.252811,0.045332,-0.207479,False,False

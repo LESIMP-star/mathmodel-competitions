@@ -1,0 +1,6 @@
+﻿point,f1,f2,f3,e_f2,e_f3,n_changed,changed_feats,max_abs_delta,hard_margin_min,hard_feasible,status,mip_gap,runtime_s,backend,nvars,nbin,nconstr
+P1,23.851904,0.0,7.451,0.0,10.2245,7,acetaldehyde;DMS;ethyl_isovalerate;phenylacetaldehyde;prenyl.isobutyrate;terpinen.4.ol;ethyl.phenylacetate,7.040085,0.0,True,OPTIMAL,0.0,0.044,gurobi,326,75,406
+P2,25.218803,0.0,6.425,0.0,8.384,6,acetaldehyde;DMS;phenylacetaldehyde;prenyl.isobutyrate;terpinen.4.ol;ethyl.phenylacetate,7.040085,-0.41790943,True,OPTIMAL,0.0,0.059,gurobi,326,75,406
+P3,27.116115,0.0,5.3507,0.0,6.5436,5,acetaldehyde;DMS;phenylacetaldehyde;prenyl.isobutyrate;terpinen.4.ol,7.040085,-0.30490168,True,OPTIMAL,0.0,0.034,gurobi,326,75,406
+P4,30.366644,0.0,4.2891,0.0,4.7031,4,acetaldehyde;DMS;phenylacetaldehyde;prenyl.isobutyrate,4.345575,-0.64397192,True,OPTIMAL,0.0,0.043,gurobi,326,75,406
+P5,37.360255,0.0,2.1439,0.0,2.8627,2,DMS;methylpyrazine,0.692693,-0.34221349,True,OPTIMAL,0.0,0.057,gurobi,326,75,406

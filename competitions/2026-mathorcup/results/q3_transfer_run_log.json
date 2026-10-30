@@ -1,0 +1,23 @@
+{
+  "src_style": "Pils/Lager",
+  "dst_style": "Tripel",
+  "n_src": 11,
+  "n_dst": 28,
+  "n_decision": 75,
+  "pls_components": 8,
+  "f1_source_measured": 26.946927,
+  "f1_at_x0": 47.144983,
+  "f1_migrated": 13.136593,
+  "f1_reduction_pct": 72.14,
+  "n_changed": 25,
+  "n_pareto": 96,
+  "n_front_unique": 3,
+  "f1_front_min": 25.451578,
+  "all_defects_non_worsening": true,
+  "n_defects_would_worsen_without_cap": 0,
+  "n_defects_total": 5,
+  "f1_without_defect_cap": 13.136593,
+  "f1_cost_of_defect_cap": 0.0,
+  "t2n_threshold_note": "附件8 该行为 NA，取文献值 0.11 µg/L = 1.1e-4 mg/L",
+  "duration_s": 19.3
+}

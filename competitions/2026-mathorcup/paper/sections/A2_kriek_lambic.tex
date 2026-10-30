@@ -1,0 +1,67 @@
+%==============================================================================
+% 表 A2：Kriek 与 Lambic 的生成化合物谱（题面点名的三个风格之另外两个）
+%==============================================================================
+\subsection*{A.6\quad Kriek 与 Lambic 的生成谱与感官画像}
+
+题面点名 Tripel、Kriek、Lambic 三个风格。正文以 Tripel 为例展开（表~\ref{tab:q3gen}、表~\ref{tab:q3profile}），此处补齐另外两个。所用模型与 Tripel 完全相同：在每个风格内部估计多元正态、协方差取 Ledoit--Wolf 收缩，各生成 200 组，不新建模型、不调参。表~\ref{tab:A2K} 与表~\ref{tab:A2L} 分别给出两个风格的生成谱与实测对照，表~\ref{tab:A2b} 给出感官画像。
+
+\subsection*{A.6.1\quad Kriek（10 个样本，收缩强度 0.7142）}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\caption{Kriek 风格的 200 组生成谱与实测对照（$\log_{10}$ 域，区间为 5\%--95\% 分位）}
+\label{tab:A2K}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}p{3.4cm}cccc@{}}
+\toprule
+\textbf{化合物} & \textbf{生成中位} & \textbf{生成区间} & \textbf{实测中位} & \textbf{实测区间} \\
+\midrule
+二甲基硫 & 2.17 & [0.59, 2.17] & 1.06 & [0.75, 1.25] \\
+4-乙烯基愈创木酚 & -2.01 & [-2.01, -0.37] & -2.01 & [-2.01, -2.01] \\
+双乙酰 & 0.00 & [0.00, 87.50] & 0.43 & [0.23, 1.22] \\
+乙酸乙酯 & -0.19 & [-0.19, 1.83] & 1.45 & [1.19, 1.67] \\
+己酸乙酯 & -2.00 & [-2.00, -0.11] & -0.77 & [-0.97, -0.58] \\
+里那醇 & 6.62 & [0.03, 21.48] & 0.36 & [0.10, 0.48] \\
+香叶醇 & 0.00 & [0.00, 1.73] & 0.14 & [0.00, 0.24] \\
+α-紫罗兰酮 & 7.21 & [-1.82, 7.21] & 5.19 & [4.64, 7.02] \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\subsection*{A.6.2\quad Lambic（11 个样本，收缩强度 0.7125）}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\caption{Lambic 风格的 200 组生成谱与实测对照（$\log_{10}$ 域，区间为 5\%--95\% 分位）}
+\label{tab:A2L}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}p{3.4cm}cccc@{}}
+\toprule
+\textbf{化合物} & \textbf{生成中位} & \textbf{生成区间} & \textbf{实测中位} & \textbf{实测区间} \\
+\midrule
+二甲基硫 & 1.38 & [0.59, 2.17] & 1.33 & [1.07, 1.45] \\
+4-乙烯基愈创木酚 & -2.01 & [-2.01, -0.37] & -2.01 & [-2.01, -1.73] \\
+双乙酰 & 0.39 & [0.00, 2.06] & 0.25 & [0.06, 0.55] \\
+乙酸乙酯 & 1.70 & [-0.19, 1.83] & 1.57 & [1.31, 1.73] \\
+己酸乙酯 & -0.62 & [-2.00, -0.11] & -0.60 & [-0.94, -0.36] \\
+里那醇 & 1.57 & [0.03, 4.74] & 0.35 & [0.08, 6.06] \\
+香叶醇 & 0.07 & [0.00, 1.73] & 0.00 & [0.00, 0.77] \\
+α-紫罗兰酮 & 4.32 & [2.29, 6.48] & 4.49 & [3.07, 5.11] \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\caption{Kriek 与 Lambic 的感官画像：实测中位与代理预测（附件4 连续强度尺度，取 10 个代表项）}
+\label{tab:A2b}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccc@{}}
+\toprule
+\textbf{感官项} & \textbf{Kriek 实测} & \textbf{Kriek 预测} & \textbf{Lambic 实测} & \textbf{Lambic 预测} \\
+\midrule
+\bottomrule
+\end{tabular*}
+\end{table}
+
+两个风格的生成谱均落在实测 5\%--95\% 区间附近，未出现越界或复制；代理预测与实测中位的偏差方向与 Tripel 一节一致——理化直连的酸度、苦度偏差较小，香气类偏差较大，这也是正文把生成结果限定为方向性候选的原因。

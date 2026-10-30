@@ -1,0 +1,101 @@
+{
+  "style": "Tripel",
+  "n_style": 28,
+  "n_features_total": 231,
+  "n_decision": 75,
+  "n_sensory": 50,
+  "kmax": 25,
+  "decision_feature_rule": "Q2 Top-3 union ∧ aroma ∧ ∪ {DMS, X4VG, diacetyl}",
+  "n_fixed_span": 0,
+  "shrinkage": 0.6844,
+  "novelty": {
+    "gen_nn_dist_median": 13.6019,
+    "real_nn_dist_median": 12.6409,
+    "ratio": 1.076,
+    "frac_gen_below_real_median": 0.225
+  },
+  "surrogate": {
+    "kind": "PLSRegression",
+    "n_components": 8,
+    "cv_folds": 5,
+    "cv_r2_median": 0.1386,
+    "cv_r2_positive": 47,
+    "err_median": 0.4626,
+    "err_p95": 1.4124,
+    "err_max": 3.1525,
+    "err_max_over_sd_median": 2.6429,
+    "fitted_on": "all 250 samples (style subset only sets Targ & bounds)"
+  },
+  "hard_constraints": {
+    "DMS": 1.236789,
+    "X4VG": -2.013157
+  },
+  "soft_constraints": {
+    "X2.3.butanedione": 0.29925
+  },
+  "threshold_quantile": 0.95,
+  "f1_form": "L1 weighted by 1/sd",
+  "gamma": 1.0,
+  "lam": 0.1,
+  "grid": [
+    20,
+    15
+  ],
+  "payoff": {
+    "payoff": {
+      "f1": {
+        "f1": 13.506382,
+        "f2": 87.198939,
+        "f3": 26.788567
+      },
+      "f2": {
+        "f1": 48.701062,
+        "f2": 0.0,
+        "f3": 9.152862
+      },
+      "f3": {
+        "f1": 47.208301,
+        "f2": 87.198939,
+        "f3": 1.022239
+      }
+    },
+    "f2_range": [
+      0.0,
+      87.19893937979998
+    ],
+    "f3_range": [
+      1.0222386961933172,
+      26.788566528800327
+    ],
+    "n_solve": 300,
+    "n_infeasible": 20,
+    "payoff_min_f1_changed": 25
+  },
+  "n_grid_points": 280,
+  "n_pareto": 5,
+  "all_points_feasible_nondominated": true,
+  "baseline_x0": {
+    "f1": 48.962012,
+    "margins": [
+      0.350479,
+      0.0
+    ]
+  },
+  "compare": {
+    "n_exact": 5,
+    "n_heur": 115,
+    "exact_dominates_heur": 0.9130434782608695,
+    "heur_dominates_exact": 0.0,
+    "n_heur_dominated": 105,
+    "n_exact_dominated": 0,
+    "hv_exact": 688.536666,
+    "hv_heur": 299.121289,
+    "hv_gain": 389.415377,
+    "nd_exact_to_heur": 0.611673,
+    "nd_heur_to_exact": 0.545231,
+    "verdict_pass": true
+  },
+  "solver_requested": "auto",
+  "gurobi_available": true,
+  "duration_s": 47.7
+}

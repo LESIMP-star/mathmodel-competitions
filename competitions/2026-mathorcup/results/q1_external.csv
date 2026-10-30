@@ -1,0 +1,15 @@
+﻿sens_4csv,sens_7csv,status,n,rho_label7_vs_4,rho_pred_vs_7,rho_pred_vs_4,r2_pred_vs_7,mae_z_pred_vs_7
+alcohol,aroma_alcohol,OK,250,0.6563,0.6856,0.9685,0.3688,0.6611
+A_malt_cara,aroma_caramel,OK,250,0.5992,0.6368,0.9043,0.3625,0.6493
+A_malt_all,aroma_malt,OK,250,0.4479,0.4838,0.936,0.2054,0.8016
+lactic,aroma_acidic,OK,250,0.4423,0.4018,0.6633,0.5223,0.425
+acetic,aroma_acetic,OK,250,0.4344,0.5154,0.5442,0.338,0.4155
+A_hops_citrus,aroma_citrus,OK,250,0.3948,0.4386,0.8755,0.199,0.7784
+sweetness,aroma_candy,OK,250,0.3614,0.3526,0.8986,0.0959,0.8481
+bitternes,aroma_bitter,OK,250,0.2396,0.2598,0.9561,-0.1546,0.8951
+clove,aroma_clove,OK,250,0.2394,0.2281,0.5434,-0.0606,0.8256
+A_esters_isoaa,aroma_banana,OK,250,0.1959,0.2295,0.9106,-0.0216,0.9406
+dms,aroma_corn,OK,250,0.1037,0.1622,0.8776,-0.0378,0.8916
+diacetyl,aroma_diacetyl,OK,250,0.0876,0.1706,0.8384,-0.1219,0.874
+aftertaste,aroma_aftertaste,OK,250,-0.0437,-0.0504,0.9414,-0.3484,1.0117
+A_esters_fruity,aroma_fruity,OK,250,-0.0337,-0.072,0.8443,-0.2734,1.0864

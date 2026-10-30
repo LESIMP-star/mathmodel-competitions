@@ -1,0 +1,24 @@
+{
+  "n_samples": 250,
+  "n_dims": 50,
+  "median_abs_res_mean": 0.006015,
+  "median_res_sd": 0.475791,
+  "n_shapiro_pass_05": 7,
+  "n_abs_skew_gt_1": 26,
+  "median_abs_skew": 1.0394,
+  "max_abs_z_overall": 10.5236,
+  "total_abs_z_gt3": 189,
+  "alcohol": {
+    "sens": "alcohol",
+    "n": 250,
+    "res_mean": -0.002895,
+    "res_sd": 0.40778,
+    "res_skew": 0.0553,
+    "res_kurt": -0.247,
+    "shapiro_W": 0.9969,
+    "shapiro_p": 0.913838,
+    "max_abs_z": 2.7609,
+    "n_abs_z_gt3": 0
+  },
+  "note": "残差 = 附件4 实测 − q1_predictions.csv 折外预测；不重训模型"
+}

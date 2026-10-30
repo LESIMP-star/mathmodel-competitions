@@ -1,0 +1,39 @@
+{
+  "n_samples": 250,
+  "n_features": 226,
+  "n_targets": 50,
+  "n_boot": 30,
+  "top_k": 3,
+  "top_measure": 10,
+  "q_target": 1.0,
+  "pi_thr": 0.5022,
+  "n_feat_ever_over_thr": 45,
+  "aroma_grade_counts": {
+    "N 无阈值（无法判 OAV）": 80,
+    "C 统计显著但 OAV 远低（需化学论证）": 36,
+    "A 统计显著且 OAV>1": 24,
+    "B 统计显著、OAV 接近阈值": 10
+  },
+  "physicochem_grade_counts": {
+    "X 理化指标（机制代理，非香气化合物）": 145,
+    "X 内标（实验室外加参照物，非啤酒成分）": 5
+  },
+  "n_non_aroma_in_aroma_top3": 0,
+  "n_no_threshold_in_aroma_top3": 80,
+  "n_multimodel_support2_in_aroma_top3": 47,
+  "median_cross_method_jaccard": 0.1025,
+  "worst_cross_method_jaccard": 0.0,
+  "median_lgbm_ridge_jaccard": 0.1111,
+  "n_oav_computable": 43,
+  "n_oav_computable_aroma": 35,
+  "n_log10_thr": 30,
+  "n_linear_thr": 13,
+  "pi_convergence": {
+    "n_boot": 30,
+    "pi_boot_se_mean": 0.0195,
+    "pi_boot_se_p95": 0.073
+  },
+  "eval_protocol": "pi: bootstrap OOB; cross-model: stratified 70/30 shared eval set",
+  "duration_s": 69.1,
+  "quick": true
+}

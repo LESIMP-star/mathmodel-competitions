@@ -1,0 +1,299 @@
+% !TEX program = xelatex
+%==============================================================================
+% 2026 年 MathorCup 数学应用挑战赛——大数据竞赛 论文模板（LaTeX 版）
+%------------------------------------------------------------------------------
+% 首页版式对照官方 Word 模板逐项复刻（坐标经 PDF 实测校准）：
+%   A4；上下 2.0cm、左右 2.5cm（1134 / 1418 缇）；行网格 15.6 磅（312 缇）
+%   队伍编号/赛道表格：0.5 磅全框线、居中、行高 22.7 / 23.6 磅
+%   浅灰分隔线：ECECEC / 1.5 磅 / 长 411.3 磅 / 左偏 2.65 磅
+%   论文题目 14pt（顶部 159.9pt）→ 摘　要 12pt（184.4pt）→ 摘要正文（200.0pt）
+%   → 关键词（465.2pt，即正文与关键词之间空 16 行网格）
+%
+% 一、二、三级标题沿用本机数模模板规范（templates/zh/mathorcup-latex）：
+%   一级：居中 黑体加粗 14pt，编号“一、”，段前 1.25em 段后 1.05em
+%   二级：左对齐 黑体加粗 12pt，编号“1.1”，段前 0.9em 段后 0.55em
+%   三级：左对齐 黑体加粗 12pt，编号“1.1.1”，段前 0.65em 段后 0.4em
+%   正文：宋体 12pt / 行距 15.6pt / 首行缩进 2em / 两端对齐
+% 每章独立成文件，置于 sections/ 下，由 main.tex 逐个 \input。
+%
+% 编译：xelatex main.tex（跑两遍，生成目录与“共 Y 页”）
+%==============================================================================
+\documentclass[12pt, a4paper, fontset=none]{ctexart}
+
+%---------- 页面：与 Word 完全一致 ----------
+\usepackage[a4paper,
+  left=70.9pt, right=70.9pt,      % 2.5cm（1418 缇）
+  top=56.7pt, bottom=56.7pt,      % 2.0cm（1134 缇）
+  headheight=13.6pt, headsep=0pt,
+  footskip=4.8pt]{geometry}
+
+%---------- 字体：正文宋体 + Calibri；标题黑体；题目/摘要/页脚 Times New Roman ----------
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setmainfont{Calibri}                                    % Word 文档默认西文字体
+\setsansfont{Arial}
+\setmonofont{Courier New}
+\setCJKmainfont[AutoFakeBold=2.5]{SimSun}                % 宋体
+\setCJKfamilyfont{zhhei}[AutoFakeBold=2.5]{SimHei}       % 黑体
+\newcommand{\heiti}{\CJKfamily{zhhei}}
+\newfontfamily\tnrfont{Times New Roman}
+% Word 不做行首标点悬挂；quanjiao 样式会让行首的（）等符号外溢到版心外
+\xeCJKsetup{PunctStyle=plain}
+
+%---------- 正文：12pt / 行距 15.6pt（= Word 文档网格 312 缇）----------
+\renewcommand{\normalsize}{\fontsize{12pt}{15.6pt}\selectfont}
+\renewcommand{\small}{\fontsize{10.5pt}{15.6pt}\selectfont}
+\linespread{1}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\widowpenalty=0 \clubpenalty=0
+% 中文段落里拉丁词/数字串无法断开时，允许最后一遍额外拉伸，避免 overfull hbox
+\setlength{\emergencystretch}{1.5em}
+% 图表与正文之间的垂直间距收紧，控制正文页数
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{2pt}
+%---------- 浮动体参数：避免图把整页占满而正文被推到下一页 ----------
+% topfraction 放宽到 0.9，允许页顶放两张图；textfraction 降到 0.07，
+% 要求每页至少留约两行正文位置；floatpagefraction 提高，减少纯图页。
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.7}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.78}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
+
+%---------- 数学与图表 ----------
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}   % 支持并排子图（相关图成对排列，单图放大配文字）
+\usepackage{float}
+\usepackage[section]{placeins}   % 图表只在本节内浮动，不越过 \section 漂到下一章
+\usepackage{longtable}
+\usepackage{listings}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+% 按竞赛 AI 工具使用规定第 6 条，插图处注明 AI 贡献：绘图代码由 AI 辅助编写，
+% 图中数据与结论经队员核验。用自定义 caption 格式统一附加，避免逐图改写。
+\DeclareCaptionFormat{aifig}{#1#2#3\hspace{0.5em}\textnormal{\footnotesize AI 辅助绘制，数据经队员核验}}
+\captionsetup{font={small}, labelsep=quad, justification=centering, singlelinecheck=true}
+\captionsetup[figure]{format=aifig}
+% 子图注只写简短标签，不带 AI 声明（AI 声明只在总图注出现一次）
+\captionsetup[subfigure]{format=default, labelsep=quad, justification=centering}
+\lstset{
+  basicstyle=\ttfamily\fontsize{9pt}{11.7pt}\selectfont,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible,
+  frame=single,
+  numbers=left,
+  numberstyle=\fontsize{8pt}{9.6pt}\selectfont,
+  showstringspaces=false,
+}
+
+%---------- 标题编号：一、 / 1.1 / 1.1.1 ----------
+\ctexset{
+  section/number       = \chinese{section},
+  subsection/number    = \arabic{section}.\arabic{subsection},
+  subsubsection/number = \arabic{section}.\arabic{subsection}.\arabic{subsubsection},
+}
+
+%---------- 标题格式（titlesec） ----------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\centering\fontsize{14pt}{16.8pt}\heiti\bfseries}
+  {\chinese{section}、}{1em}{}
+\titleformat{\subsection}
+  {\fontsize{12pt}{14.4pt}\heiti\bfseries}
+  {\arabic{section}.\arabic{subsection}}{1em}{}
+\titleformat{\subsubsection}
+  {\fontsize{12pt}{14.4pt}\heiti\bfseries}
+  {\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}{1em}{}
+\titlespacing{\section}       {0pt}{1.25em}{1.05em}
+\titlespacing{\subsection}    {0pt}{0.9em}{0.55em}
+\titlespacing{\subsubsection} {0pt}{0.65em}{0.4em}
+
+%---------- 目录：收录到三级标题，点线引导 ----------
+% 对应 Word 的 toc1/toc2/toc3 样式：
+%   一级 12pt 加粗，编号“一、”与标题连排，缩进 0
+%   二级 11pt 加粗，编号“1.1”，缩进 10.5 磅（210 缇）
+%   三级 11pt 常规，编号“1.1.1”，缩进 21 磅（420 缇）
+\setcounter{tocdepth}{2}
+\usepackage{tocloft}
+% tocloft 加载完再设一次：目录只到二级，三级标题不上目录
+\setcounter{tocdepth}{2}
+\renewcommand{\cftsecfont}{\fontsize{12pt}{14.2pt}\bfseries}
+\renewcommand{\cftsecpagefont}{\bfseries}
+\renewcommand{\cftsubsecfont}{\fontsize{11pt}{13.4pt}\bfseries}
+\renewcommand{\cftsubsecpagefont}{\bfseries}
+\renewcommand{\cftsubsubsecfont}{\fontsize{11pt}{15.6pt}}
+\renewcommand{\cftsubsubsecpagefont}{}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsubsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecaftersnum}{、}
+\renewcommand{\cftsubsecaftersnum}{\hspace{0.5em}}
+\renewcommand{\cftsubsubsecaftersnum}{\hspace{0.5em}}
+\setlength{\cftsecindent}{0pt}
+% 二级标题缩进到与一级标题的第一个字对齐：一级编号「一、」占 2.05em，故二级 indent=2.05em
+\setlength{\cftsubsecindent}{2.05em}
+\setlength{\cftsubsubsecindent}{4.1em}
+\setlength{\cftsecnumwidth}{2.05em}
+\setlength{\cftsubsecnumwidth}{2.05em}
+\setlength{\cftsubsubsecnumwidth}{2.9em}
+% Word toc1 样式的段前间距为 120 缇 = 6 磅
+\setlength{\cftbeforesecskip}{1.6pt}
+\setlength{\cftbeforesubsecskip}{0pt}
+\setlength{\cftbeforesubsubsecskip}{0pt}
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{0pt}
+\renewcommand{\cfttoctitlefont}{}
+
+%---------- 页脚：第 X 页 共 Y 页（9pt） ----------
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\newcommand{\jiuhao}{\fontsize{9pt}{10.8pt}\selectfont}
+\fancypagestyle{mainstyle}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\jiuhao\tnrfont 第~\thepage~页~共~\pageref{LastPage}~页}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+%---------- 其他 ----------
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\definecolor{fengexian}{HTML}{ECECEC}
+
+%==============================================================================
+% 首页（对应 Word 第 1 页，坐标为 PDF 实测值）
+%==============================================================================
+\newcommand{\frontpage}{%
+  \thispagestyle{empty}%
+  \setlength{\parindent}{0pt}%
+  % Word 首段为空段落：占一行网格，表格顶边落在 72.2pt
+  \vspace*{2.6pt}%
+  % --- 队伍编号 / 赛道 表格：列宽 2217 缇 = 100.05pt，行高 22.7 / 23.6pt，0.5 磅框线 ---
+  \begingroup
+  \fontsize{10.5pt}{15.6pt}\selectfont
+  \renewcommand{\arraystretch}{1}%
+  \setlength{\tabcolsep}{5.4pt}%
+  \centering
+  \begin{tabular}{|>{\centering\arraybackslash}m{100.05pt}|>{\centering\arraybackslash}m{100.05pt}|}
+  \hline
+  \rule[-6.4pt]{0pt}{23.0pt}\raisebox{1.07pt}{队伍编号} & \rule[-6.4pt]{0pt}{23.0pt}\raisebox{1.30pt}{MCB260XXXX} \\
+  \hline
+  \rule[-6.0pt]{0pt}{23.8pt}\raisebox{1.94pt}{赛道} & \rule[-6.0pt]{0pt}{23.8pt}\raisebox{1.94pt}{A} \\
+  \hline
+  \end{tabular}\par
+  \endgroup
+  % --- 浅灰分隔线（ECECEC / 1.5 磅 / 长 411.3 磅 / 左偏 2.65 磅，y = 143.5）---
+  % xdvipdfmx 会把实心矩形优化成描边线，横向各缩进半个线宽，故宽度补 1.54 磅、左偏移补 0.27 磅
+  \vspace*{16.93pt}%
+  \noindent\hspace*{2.92pt}%
+  {\setlength{\fboxsep}{0pt}\colorbox{fengexian}{\vrule width 412.84pt height 1.5pt depth 0pt}}\par
+  % --- 论文题目：14pt，居中，文字顶部对齐 159.9pt ---
+  \vspace*{9.2pt}%
+  {\centering{\tnrfont\fontsize{14pt}{15.6pt}\selectfont 啤酒风味代谢数据的感官预测、关键化合物归因与受约束配方重构\par}}%
+  \vspace*{7.21pt}%
+  % --- 摘　要：12pt，居中，两字间距 6 磅，文字顶部对齐 184.4pt ---
+  {\centering{\tnrfont\fontsize{12pt}{15.6pt}\selectfont 摘\hspace{6pt}要\par}}%
+  % --- 摘要正文（左对齐，无首行缩进）---
+  {\setlength{\parindent}{2em}%
+本文以附件1 的 231 个化学指标预测附件4 的 50 个感官项，并据此完成关键化合物的候选筛选与受约束的配方重构。建模前先逐文件对拍数据：样本 250 款而非题面所称 226 款；附件2、5、6 是 Spearman 相关而非 Pearson；附件4 是中心化后的连续强度而非 0--6 整数，仿射反解残差 0.11--0.15；231 列中 37 列确认在对数域、33 列确认为线性浓度。这些差异逐条决定了后续每一问的处理方式。
+
+问题一要求给出 50 个感官维度的 0--6 分级。难点不在回归而在评估：250 个样本对 231 个特征接近 1:1，故用外层 5 折评估、内层 5 折选型的嵌套交叉验证，评估折不参与任何选择；候选模型为岭回归、弹性网、LightGBM 与 ExtraTrees，逐项取内层最优，未感知占比超过 30\% 的 9 项另加“先判有无、再判强弱”的两段式结构。50 项 $R^2$ 中位 0.1469、均值 0.2223，酸度 0.7149、酒精感 0.7108；分级采用零膨胀先验的等频分位映射，加权 kappa 中位 0.3400，34 项超过 0.3。
+
+问题二要求每个感官维度的 Top-3 关键化合物。附件2 的网络虽有社区结构（Louvain $Q=0.3229$、高于零分布 95\% 分位），但与化学来源几乎无关（ARI 仅 0.0838），故归因以 LightGBM 的逐列置换重要性完成，化学族标签只用于解释、不用于整组打乱；稳定性由 200 次自助重采样的入选频率量化，阈值由稳定选择的界反解为 0.5022，属操作性筛选门槛而非严格错误发现率控制；化学合理性以气味活性值裁判。150 条记录中 19 条 OAV$>1$、8 条接近阈值、40 条远低于阈值、83 条因阈值缺项无法判断，其中同时越过筛选阈值且 OAV$>1$ 的有 10 条；跨模型 Jaccard 中位仅 0.0974，说明名单高度依赖模型族。
+
+问题三要求生成新配方并在受约束下优化感官。最小风格仅 3 款样本，深度生成不可行，故改用风格内多元正态加 Ledoit--Wolf 收缩（强度 0.6844），最近邻距离比 1.076 说明生成未退化为复制；感官用 8 成分偏最小二乘作线性代理，决策维由问题二 Top-3 并集压到 75；以 $\varepsilon$-约束法求解混合整数线性规划，规模 326 个变量（含 75 个 0--1）、406 条约束，280 个网格点中保留 5 个 Pareto 点。感官偏差由基线 48.9620 降至 23.8519，降幅 51.3\%，前沿端点只挪动 7 个化合物；精确前沿支配 NSGA-II 的 115 个非支配点中的 91.30\%，超体积 688.54 对 299.12。跨风格迁移把偏差从 47.1450 降到 13.1366，降幅 72.14\%，五类缺陷物全部不恶化。\par}
+  % --- 空 16 行网格，把“关键词”压到 465.2pt ---
+  \count255=0
+  \loop\ifnum\count255<10 \null\par \advance\count255 by 1 \repeat
+  % --- 关键词 ---
+  \vspace*{1.1pt}%
+  关键词：啤酒风味；感官预测；嵌套交叉验证；置换重要性；气味活性值；混合整数规划%
+}
+
+%==============================================================================
+% 目录页（对应 Word 第 2 页）
+%==============================================================================
+\makeatletter
+\newcommand{\tocpage}{%
+  \clearpage
+  \thispagestyle{empty}%
+  \setlength{\parindent}{0pt}%
+  \vspace*{-6.75pt}%
+  {\centering{\tnrfont\fontsize{14pt}{15.6pt}\selectfont 目录\par}}%
+  % 首行位置 = 标题 65.2 + 段距 15.6 + 一级条目 before-skip 6.2 ≈ 95.7
+  \vspace*{2pt}
+  \setcounter{tocdepth}{2}%
+  \@starttoc{toc}%
+}
+\makeatother
+
+%==============================================================================
+% 参考文献 / 附录：\section* 不编号，但用 addcontentsline 进目录
+%==============================================================================
+\newcommand{\referencescn}{%
+  \phantomsection
+  \section*{参考文献}%
+  \addcontentsline{toc}{section}{参考文献}%
+  \input{references}%
+}
+\newcommand{\appendixcn}{%
+  \phantomsection
+  \section*{附\quad 录}%
+  \addcontentsline{toc}{section}{附录}%
+  \input{sections/A_附录代码_head}%
+  \input{sections/A_附录代码_src}%
+  \input{sections/A1_grades}%
+  \input{sections/A2_kriek_lambic}%
+}
+
+%==============================================================================
+\begin{document}
+
+\frontpage
+
+\tocpage
+
+%--------------------------- 正文（页码从 1 起） ---------------------------
+\clearpage
+\setcounter{page}{1}
+\pagestyle{mainstyle}
+
+% \frontpage / \tocpage 内部为对齐 Word 模板而写了 \setlength{\parindent}{0pt}，
+% 二者都没有包在 group 里，会把全局首行缩进永久清零（实测正文全部顶格）。
+% 此处恢复 main.tex:47 声明的 2em —— 只补设长度，不改首页/目录页的任何版式代码。
+\setlength{\parindent}{2em}
+
+\input{sections/1_问题重述}
+\input{sections/2_问题分析}
+\input{sections/3_模型假设}
+\input{sections/4_符号说明}
+\input{sections/5_数据预处理}
+\input{sections/6_问题一}
+\input{sections/7_问题二}
+\input{sections/8_问题三}
+\input{sections/9_模型评价}
+\input{sections/10_结论}
+
+\newpage
+\referencescn
+
+\newpage
+\input{sections/11_AI声明}
+
+\newpage
+\appendixcn
+
+\end{document}

@@ -1,0 +1,6 @@
+﻿defect,before,after_no_cap,delta_no_cap,after_capped,would_worsen
+DMS,1.17934444,1.17934444,0.0,1.17934444,False
+X2.3.butanedione,0.05695953,0.05695953,0.0,0.05695953,False
+X4VG,-2.01315738,-2.01315738,0.0,-2.01315738,False
+X.E..2.nonenal,0.00201172,0.00201172,0.0,0.00201172,False
+stale_hops,0.252811,0.045332,-0.207479,0.045332,False

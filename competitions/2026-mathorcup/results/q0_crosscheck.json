@@ -1,0 +1,21 @@
+{
+  "official_2csv": {
+    "n_rows_official": 231,
+    "n_rows_mapped_to_226": 212,
+    "n_compared_pairs": 44732,
+    "median_abs_diff": 8.326672684688674e-17,
+    "p90_abs_diff": 4.163336342344337e-16,
+    "max_abs_diff": 6.661338147750939e-16,
+    "pearson_agreement": 1.0
+  },
+  "official_6csv": {
+    "n_rows": 44,
+    "n_rows_mapped": 44,
+    "n_cols": 50,
+    "n_cols_mapped": 49,
+    "n_compared_cells": 2156,
+    "median_abs_diff": 5.551115123125783e-17,
+    "pearson_agreement": 0.9999999999999999,
+    "coverage_of_226x50": 0.1867
+  }
+}

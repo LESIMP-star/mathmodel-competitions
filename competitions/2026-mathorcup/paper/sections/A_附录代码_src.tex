@@ -1,0 +1,374 @@
+%==============================================================================
+% 附录 A.4 核心实现（完整源码随支撑材料交付）
+%==============================================================================
+
+\subsubsection*{A.4.1\quad 嵌套交叉验证的单维流程}
+
+对应式 (5)、第六章 6.3 节；源码 \texttt{code/q1.py} 的 L248--L297。
+
+\begin{lstlisting}[language=Python]
+def nested_cv_one(y, Xraw, hurdle, outer=5, inner=5, seed=SEED):
+    """嵌套交叉验证：外层评估、内层选型，预处理参数逐层独立估计。
+
+    **预处理的位置是关键**：内层的缺失填补与标准化参数只能由该次内层训练折
+    估计；若用整个外层训练集先算好再切内层，内层验证折的特征信息就参与了
+    参数估计（内层泄漏），选型结果不再干净。外层测试折始终只用外层训练折的
+    参数，这一点无论哪种写法都成立。
+    """
+    from sklearn.model_selection import KFold
+    n = len(y)
+    kf_out = KFold(n_splits=outer, shuffle=True, random_state=seed)
+    oof = np.full(n, np.nan)
+    chosen = []
+    names = list(make_models().keys())
+    for fold, (tr, te) in enumerate(kf_out.split(Xraw)):
+        Xtr_raw, Xte_raw = Xraw[tr], Xraw[te]
+        ytr, yte = y[tr], y[te]
+
+        # ── 内层选模型：每次划分只用内层训练折估计预处理参数
+        kf_in = KFold(n_splits=inner, shuffle=True, random_state=seed + fold)
+        best_name, best_r2 = None, -np.inf
+        for name in names:
+            preds = np.full(len(tr), np.nan)
+            for itr, ite in kf_in.split(Xtr_raw):
+                med_i, sd_i = _fit_prep(Xtr_raw[itr])
+                A_i = _apply_prep(Xtr_raw[itr], med_i, sd_i)
+                B_i = _apply_prep(Xtr_raw[ite], med_i, sd_i)
+                models = make_models_hurdle() if hurdle else make_models()
+                if hurdle:
+                    thr_hi = float(np.min(ytr[itr]) + FLOOR_WIN)
+                    preds[ite] = _fit_predict_hurdle(models, name, A_i, ytr[itr], B_i, thr_hi)
+                else:
+                    preds[ite] = _fit_predict_plain(name, models[name], A_i, ytr[itr], B_i)
+            r2 = _score(ytr, preds)[0]
+            if np.isfinite(r2) and r2 > best_r2:
+                best_r2, best_name = r2, name
+        best_name = best_name or 'ridge'
+        chosen.append(best_name)
+
+        # ── 外层：选完模型后，在整个外层训练折上重估一次预处理再预测测试折
+        med, sd = _fit_prep(Xtr_raw)
+        A = _apply_prep(Xtr_raw, med, sd)
+        B = _apply_prep(Xte_raw, med, sd)
+        models = make_models_hurdle() if hurdle else make_models()
+        if hurdle:
+            thr_hi = float(np.min(ytr) + FLOOR_WIN)
+            oof[te] = _fit_predict_hurdle(models, best_name, A, ytr, B, thr_hi)
+        else:
+            oof[te] = _fit_predict_plain(best_name, models[best_name], A, ytr, B)
+    return oof, chosen
+\end{lstlisting}
+
+\subsubsection*{A.4.2\quad hurdle 两部模型的两层组合}
+
+对应式 (4)；源码 \texttt{code/q1.py} 的 L176--L188。
+
+\begin{lstlisting}[language=Python]
+def _fit_predict_hurdle(models, name, Xtr, ytr, Xte, thr_hi):
+    """两部模型：π = P(y > 地板窗)，μ = E[y | y > 地板窗]；ŷ = (1-π)·ȳ_floor + π·μ̂。"""
+    clf, reg = models[name]
+    z = (ytr > thr_hi).astype(int)
+    if z.sum() < 5 or (1 - z).sum() < 5:      # 某折退化 → 退回单部回归
+        return _fit_predict_plain(name, reg, Xtr, ytr, Xte)
+    c = clf.__class__(**clf.get_params()).fit(Xtr, z)
+    pi = c.predict_proba(Xte)[:, 1]
+    r = reg.__class__(**reg.get_params()).fit(Xtr[z == 1], ytr[z == 1])
+    mu = r.predict(Xte)
+    y_floor = float(np.mean(ytr[z == 0])) if (z == 0).any() else float(np.min(ytr))
+    out = (1.0 - pi) * y_floor + pi * mu
+    return np.clip(out, float(np.min(ytr)), float(np.max(ytr)))
+\end{lstlisting}
+
+\subsubsection*{A.4.3\quad 0--6 分位映射与加权 kappa}
+
+对应式 (6)、表 5；源码 \texttt{code/q1\_grades.py} 的 L68--L79、L82--L99。
+
+\begin{lstlisting}[language=Python]
+def quantile_to_grade(z, prior):
+    """保序分位映射：把列内经验分位按目标分布切成 0-6"""
+    z = np.asarray(z, float)
+    ok = np.isfinite(z)
+    out = np.full(len(z), np.nan)
+    if ok.sum() == 0:
+        return out
+    r = pd.Series(z[ok]).rank(method='average').values / ok.sum()   # (0,1]
+    cdf = np.cumsum(prior)
+    g = np.searchsorted(cdf, r, side='left')
+    out[ok] = np.clip(g, 0, 6)
+    return out
+
+def qwk(y_true, y_pred, k=7):
+    """二次加权 kappa"""
+    y_true = np.asarray(y_true, int)
+    y_pred = np.asarray(y_pred, int)
+    O = np.zeros((k, k))
+    for a, b in zip(y_true, y_pred):
+        if 0 <= a < k and 0 <= b < k:
+            O[a, b] += 1
+    if O.sum() == 0:
+        return np.nan
+    w = (np.arange(k)[:, None] - np.arange(k)[None, :]) ** 2 / (k - 1) ** 2
+    E = np.outer(O.sum(1), O.sum(0)) / O.sum()
+    return 1 - (w * O).sum() / max((w * E).sum(), 1e-12)
+
+
+# ═════════════════════════════════════════════════════════════
+# 以下为本文新增：等频映射（仅作对照）与直接取整（反例）
+# ═════════════════════════════════════════════════════════════
+\end{lstlisting}
+
+\subsubsection*{A.4.4\quad 逐列置换重要性}
+
+对应式 (7)--(8)；源码 \texttt{code/q2.py} 的 L195--L224。
+
+\begin{lstlisting}[language=Python]
+def permutation_importance(Xtr, ytr, Xev, yev, kind='lgbm', seed=SEED,
+                           n_repeats=1, top_k=TOP_MEASURE):
+    """在**评估集**上做逐列置换，返回 (importance, top_idx)。
+
+    importance_j = R²(基线) − R²(打乱第 j 列)。
+    栈式预测：把 p 个置换副本纵向拼接后一次 predict，实测比逐列 predict 快 1.6x，
+    两种写法数值完全一致（差 0.000e+00）。
+    """
+    n_ev, p = Xev.shape
+    m = _make_model(kind, seed).fit(Xtr, ytr)
+    ss_tot = float(np.sum((yev - yev.mean()) ** 2))
+    if ss_tot <= 0 or n_ev < 5:
+        return np.zeros(p), np.arange(min(top_k, p))
+
+    base_r2 = 1.0 - float(np.sum((yev - _clip_pred(m.predict(Xev), ytr)) ** 2)) / ss_tot
+
+    rng = np.random.default_rng(seed)
+    imp = np.zeros(p)
+    for _ in range(n_repeats):
+        blocks = []
+        for j in range(p):
+            Xp = Xev.copy()
+            Xp[:, j] = Xp[rng.permutation(n_ev), j]
+            blocks.append(Xp)
+        pred_all = m.predict(np.vstack(blocks))
+        for j in range(p):
+            seg = _clip_pred(pred_all[j * n_ev:(j + 1) * n_ev], ytr)
+            imp[j] += base_r2 - (1.0 - float(np.sum((yev - seg) ** 2)) / ss_tot)
+    imp /= n_repeats
+    return imp, np.argsort(-imp)[:top_k]
+\end{lstlisting}
+
+\subsubsection*{A.4.5\quad 入选频率阈值的反解}
+
+对应式 (9)；源码 \texttt{code/q2.py} 的 L261--L278。
+
+\begin{lstlisting}[language=Python]
+def fdr_threshold(p, q=Q_TARGET):
+    """由稳定性选择的有限样本界反解入选频率阈值 π_thr = (1 + q/p)/2。
+
+    Meinshausen & Bühlmann (2010) 的界为 E[V] ≤ q_sel² / ((2·π_thr − 1)·p)，
+    其中 **q_sel 是基础选择程序每次选出的变量数**（本题 TOP_MEASURE = 10），
+    p 是候选变量数，V 是误选变量数。按 E[V] ≤ q 反解得 π_thr = (1 + q/p)/2。
+
+    【口径警告】本函数传入的 q 是"允许的期望误选个数"，不是基础程序的选出数。
+    取 q=1、p=231 得 π_thr = 0.5022，含义是"把期望误选数当 1 个来定的操作性阈值"，
+    **不构成 0.05 水平上的 FDR 控制**。若严格按界中 q_sel 的原义取 10，
+    同一式给出 π_thr = 0.7165，本脚本未采用。
+    论文里只能说这是"入选频率阈值"，不能说"控制了错误发现率"。
+    函数名沿用旧名以免下游引用断掉，语义以上述说明为准。
+
+    下限 0.5（π<0.5 连多数稳定都算不上）；上限 0.95（200 次 bootstrap 的
+    蒙特卡洛标准差约 0.015，阈值再高就分不清 0.95 与 1.00）。
+    """
+    return float(min(max((1.0 + q / p) / 2.0, 0.5), 0.95))
+\end{lstlisting}
+
+\subsubsection*{A.4.6\quad 两种拉普拉斯下的谱嵌入}
+
+对应第七章 7.1 节；源码 \texttt{code/q2\_graph.py} 的 L88--L106。
+
+\begin{lstlisting}[language=Python]
+def spectral_embed(A, k, normalized=False):
+    """谱嵌入。
+
+    队友 s1_graph 用的是**组合拉普拉斯** L = D − A；标准 Ng-Jordan-Weiss 谱聚类
+    用的是**归一化拉普拉斯** L_sym = I − D^{-1/2} A D^{-1/2}。在 τ=0.30 这种
+    密度约 15% 的稠密图上，组合拉普拉斯的前 k 个特征向量不携带社区信息
+    （实测所有 k-means 解都退化为"一个大模块 + 若干单点"、Q≈0），这也是
+    队友得到 within/between 仅 1.56 的真正原因。
+    normalized=True 时走 L_sym，用于验证"是算法选择问题而非图无结构"。
+    """
+    deg = A.sum(1)
+    if normalized:
+        dinv = 1.0 / np.sqrt(np.maximum(deg, 1e-12))
+        Dm = np.diag(dinv)
+        L = np.eye(len(A)) - Dm @ A @ Dm
+    else:
+        L = np.diag(deg) - A
+    _, V = np.linalg.eigh(L)
+    return V[:, 1:k + 1]
+\end{lstlisting}
+
+\subsubsection*{A.4.7\quad MILP 的矩阵装配}
+
+对应式 (15)--(17)；源码 \texttt{code/q3.py} 的 L296--L415。
+
+\begin{lstlisting}[language=Python]
+def build_arrays(n, ns, kh_idx, ks_idx, x0, lb, ub, targ, B, C, w,
+                 gamma, lam, hard_cap, soft_thr, kmax,
+                 e_f2=np.inf, e_f3=np.inf, sens_ub=None):
+    """把 MILP 写成通用矩阵形式（Gurobi 与 HiGHS 共用同一份定义）。
+
+    变量顺序： dp[n) | dn[n) | y[n) | up[ns) | um[ns) | z[nk)
+
+    sens_ub: 可选，[(感官维下标, 上界)] —— 追加"代理预测值不恶化"型约束
+        base_s + Σ_j B_sj (dp_j − dn_j) ≤ cap
+    必须写成 build_arrays 的**参数**而不是外部给 A_ub 追加行：augmecon2 在 ε 网格
+    循环里会重新调用本函数，外挂的行会被丢掉（实测 stale_hops 因此恶化 +0.053）。
+    """
+    nk = len(ks_idx)
+    nv = 3 * n + 2 * ns + nk
+    i_dp, i_dn, i_y = 0, n, 2 * n
+    i_up, i_um = 3 * n, 3 * n + ns
+    i_z = 3 * n + 2 * ns
+
+    span = np.maximum(ub - lb, 1e-9)
+    M = np.maximum.reduce([np.abs(ub - x0), np.abs(x0 - lb)])
+    M = np.maximum(M, 1e-6)
+    # z 的上界必须取"变量上下界内**物理可达**的最大违反量"，不能用一个拍脑袋的
+    # 大常数（初版取 2·span_max+10，使 payoff 表的 f2 上界跑到 185，
+    # 而真实可达最大违反只有 ub−θ ≈ 2 —— ε 网格整个浪费在无约束区间上）。
+    z_max = np.array([max(0.0, float(ub[j] - soft_thr[k])) + 1e-6
+                      for k, j in enumerate(ks_idx)], dtype=float)
+    if z_max.size == 0:
+        z_max = np.zeros(0)
+
+    rows, cols, vals, rhs = [], [], [], []
+    r = 0
+
+    def add(ri, ci, v):
+        rows.append(ri); cols.append(ci); vals.append(v)
+
+    # (1) 上界  x0 + dp - dn <= ub
+    for j in range(n):
+        add(r, i_dp + j, 1.0); add(r, i_dn + j, -1.0)
+        rhs.append(ub[j] - x0[j]); r += 1
+    # (2) 下界  x0 + dp - dn >= lb
+    for j in range(n):
+        add(r, i_dn + j, 1.0); add(r, i_dp + j, -1.0)
+        rhs.append(x0[j] - lb[j]); r += 1
+    # (3) big-M 稀疏化
+    for j in range(n):
+        add(r, i_dp + j, 1.0); add(r, i_y + j, -M[j]); rhs.append(0.0); r += 1
+        add(r, i_dn + j, 1.0); add(r, i_y + j, -M[j]); rhs.append(0.0); r += 1
+    # (4) 感官偏差
+    #     pred_s = base_s + Σ_j B_sj (dp_j − dn_j)，要求 up_s − um_s = targ_s − pred_s
+    #     ⇒ up − um + Σ_j B_sj (dp_j − dn_j) = targ_s − base_s
+    # 这是**等式**，必须写成正反两行（<= 与 >=）。只写一行 <= 时，求解器可以取
+    # up=um=0 直接满足不等式，f1 便与真实偏差脱钩（实测 solver_obj 4.36 vs 真实 38.16）。
+    # 系数符号是 **+B**：写成 −B 会最小化 |targ − base + BΔ|，同样与 |targ − pred| 不符。
+    base = C + B @ x0
+    for sign in (+1.0, -1.0):
+        for s in range(ns):
+            add(r, i_up + s, sign); add(r, i_um + s, -sign)
+            for j in range(n):
+                if B[s, j] != 0.0:
+                    add(r, i_dp + j, sign * B[s, j])
+                    add(r, i_dn + j, -sign * B[s, j])
+            rhs.append(sign * (targ[s] - base[s])); r += 1
+    # (5) 硬约束
+    for k, j in enumerate(kh_idx):
+        add(r, i_dp + j, 1.0); add(r, i_dn + j, -1.0)
+        rhs.append(hard_cap[k] - x0[j]); r += 1
+    # (6) 软约束  z >= (x0 + dp - dn) - log10θ
+    for k, j in enumerate(ks_idx):
+        add(r, i_dp + j, 1.0); add(r, i_dn + j, -1.0); add(r, i_z + k, -1.0)
+        rhs.append(soft_thr[k] - x0[j]); r += 1
+    # (7) 基数约束 Σ y <= K_MAX
+    for j in range(n):
+        add(r, i_y + j, 1.0)
+    rhs.append(float(kmax)); r += 1
+    # (6b) 感官非恶化约束  base_s + Σ_j B_sj (dp_j − dn_j) ≤ cap
+    if sens_ub:
+        for s_idx, cap in sens_ub:
+            for j in range(n):
+                if B[s_idx, j] != 0.0:
+                    add(r, i_dp + j, B[s_idx, j])
+                    add(r, i_dn + j, -B[s_idx, j])
+            rhs.append(float(cap) - float(base[s_idx])); r += 1
+    # (8) ε-约束
+    if np.isfinite(e_f2):
+        for k in range(nk):
+            add(r, i_z + k, 1.0)
+        rhs.append(e_f2); r += 1
+    if np.isfinite(e_f3):
+        for j in range(n):
+            add(r, i_y + j, gamma)
+            add(r, i_dp + j, lam); add(r, i_dn + j, lam)
+        rhs.append(e_f3); r += 1
+
+    A_ub = sp.csr_matrix((vals, (rows, cols)), shape=(r, nv))
+    b_ub = np.array(rhs, dtype=float)
+
+    c = np.zeros(nv)
+    c[i_up:i_up + ns] = w
+    c[i_um:i_um + ns] = w
+    c[i_y:i_y + n] = gamma
+    c[i_dp:i_dp + n] = lam
+    c[i_dn:i_dn + n] = lam
+
+    bounds = ([(0.0, M[j]) for j in range(n)] +
+              [(0.0, M[j]) for j in range(n)] +
+              [(0.0, 1.0)] * n +
+              [(0.0, np.inf)] * (2 * ns) +
+              [(0.0, float(z_max[k])) for k in range(nk)])
+    integrality = np.zeros(nv, dtype=int)
+    integrality[i_y:i_y + n] = 1
+
+    return dict(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds, integrality=integrality,
+                nv=nv, n=n, ns=ns, nk=nk, base=base,
+                # wj = 1/可行域宽度：把 dp/dn 折算成"占可行域的比例"。
+                # 必要性：决策列并非同域——X2.methyltetrahydrofuran.3.one 与
+                # X2.3.butanedione 是线性浓度（宽 29.1 与 87.5），其余是 log10
+                # 浓度（宽约 6.9）。若 f3=Σ|x−x0| 直接相加，等于把线性列的
+                # 浓度差和 log10 列的对数差混在一个量纲里，f3 会被前两列支配。
+                wj=1.0 / np.maximum(ub - lb, 1e-9),
+                idx=dict(dp=i_dp, dn=i_dn, y=i_y, up=i_up, um=i_um, z=i_z))
+\end{lstlisting}
+
+\subsubsection*{A.4.8\quad 偏最小二乘代理}
+
+对应式 (14)；源码 \texttt{code/q3.py} 的 L252--L285。
+
+\begin{lstlisting}[language=Python]
+def fit_pls_surrogate(X, Y, grid=PLSR_GRID, cv=5, seed=SEED):
+    """PLS 回归，成分数由 K 折交叉验证选。返回 (C, B, k_best, cv_r2_per_target)。"""
+    from sklearn.cross_decomposition import PLSRegression
+    from sklearn.model_selection import KFold
+    kf = KFold(n_splits=cv, shuffle=True, random_state=seed)
+    best = (np.inf, grid[0])
+    for k in grid:
+        if k > min(X.shape) - 1:
+            continue
+        mse = 0.0
+        for tr, te in kf.split(X):
+            m = PLSRegression(n_components=k, scale=True)
+            m.fit(X[tr], Y[tr])
+            mse += float(np.mean((Y[te] - m.predict(X[te])) ** 2))
+        mse /= cv
+        if mse < best[0]:
+            best = (mse, k)
+    k_best = best[1]
+    m = PLSRegression(n_components=k_best, scale=True).fit(X, Y)
+    # sklearn 的 PLSRegression.coef_ 在多目标时为 (n_targets, n_features)，
+    # 正是我们要的 B（感官 × 化合物），不要转置。
+    B = np.asarray(m.coef_, dtype=float)
+    if B.shape != (Y.shape[1], X.shape[1]):
+        raise RuntimeError(f'PLS coef_ 形状异常：{B.shape}，期望 {(Y.shape[1], X.shape[1])}')
+    C = np.asarray(m.intercept_, dtype=float).ravel()
+
+    # 逐靶交叉验证 R²
+    pred = np.zeros_like(Y, dtype=float)
+    for tr, te in kf.split(X):
+        mm = PLSRegression(n_components=k_best, scale=True).fit(X[tr], Y[tr])
+        pred[te] = mm.predict(X[te])
+    ss = ((Y - Y.mean(0)) ** 2).sum(0)
+    cv_r2 = 1.0 - ((Y - pred) ** 2).sum(0) / np.maximum(ss, 1e-12)
+    return C, B, int(k_best), cv_r2, float(best[0])
+\end{lstlisting}

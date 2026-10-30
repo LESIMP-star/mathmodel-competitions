@@ -1,0 +1,151 @@
+{
+  "n_samples": 250,
+  "n_features": 231,
+  "n_sensory": 50,
+  "n_styles": 22,
+  "n_log10_cols": 37,
+  "n_true_na_cells": 73,
+  "n_true_na_cols": 9,
+  "feature_corr": {
+    "n_pairs": 26565,
+    "median_abs_rho": 0.1291590062728777,
+    "n_abs_rho_gt_0.5": 645,
+    "n_abs_rho_gt_0.9": 9,
+    "median_abs_r_pearson": 0.09750224512458035,
+    "n_abs_r_gt_0.9_pearson": 5,
+    "spearman_vs_pearson_median_abs_diff": 0.062190003110211896
+  },
+  "collinearity": {
+    "spearman": {
+      "n_pc_for_90pct": 67,
+      "n_pc_for_95pct": 94,
+      "pc1_explained_pct": 14.477550415221415,
+      "pc10_explained_pct": 56.057294340594076,
+      "pc50_explained_pct": 85.18167077486984,
+      "n_eigen_gt_1": 42,
+      "effective_rank_participation": 20.620324129723794,
+      "condition_number": 203685.65688089558,
+      "max_condition_index": 5783924.63209388,
+      "vif_median": 35.95675797828638,
+      "vif_max": 964.9120264046837,
+      "n_vif_gt_10": 219,
+      "n_vif_gt_100": 31
+    },
+    "pearson": {
+      "n_pc_for_90pct": 79,
+      "n_pc_for_95pct": 105,
+      "pc1_explained_pct": 13.955078169060172,
+      "pc10_explained_pct": 48.66421226146304,
+      "pc50_explained_pct": 80.83058638783095,
+      "n_eigen_gt_1": 50,
+      "effective_rank_participation": 25.475727988952464,
+      "condition_number": 83586.5311552037,
+      "max_condition_index": 5679128.757984352,
+      "vif_median": 24.279357227581404,
+      "vif_max": 778.2328190287981,
+      "n_vif_gt_10": 213,
+      "n_vif_gt_100": 29
+    },
+    "delta_n_pc90": 12,
+    "delta_n_vif_gt_10": -6,
+    "note_pearson_baseline": "verify_facts.py:516-545 用 Pearson + 剔除含 NA 列（218 列）"
+  },
+  "feature_sens_corr": {
+    "n_cells": 11550,
+    "median_abs": 0.08780661928343356,
+    "n_abs_gt_0.3": 559,
+    "n_abs_gt_0.5": 44,
+    "n_abs_gt_0.7": 3,
+    "max_abs": 0.8171474389230694,
+    "top_sens_feat_pairs": [
+      {
+        "sens": "alcohol",
+        "feat": "ethanol..v.v.",
+        "rho": 0.8171
+      },
+      {
+        "sens": "body",
+        "feat": "ethanol..v.v.",
+        "rho": 0.7191
+      },
+      {
+        "sens": "bitternes",
+        "feat": "bitterness",
+        "rho": 0.6822
+      },
+      {
+        "sens": "A_malt_cara",
+        "feat": "color.EBC.",
+        "rho": 0.5636
+      },
+      {
+        "sens": "co2",
+        "feat": "ethyl_octanoate",
+        "rho": 0.5527
+      },
+      {
+        "sens": "F_hops_all",
+        "feat": "bitterness",
+        "rho": 0.5419
+      },
+      {
+        "sens": "A_malt_all",
+        "feat": "color.EBC.",
+        "rho": 0.5415
+      },
+      {
+        "sens": "aftertaste",
+        "feat": "ethanol..v.v.",
+        "rho": 0.5175
+      },
+      {
+        "sens": "F_hops_noble",
+        "feat": "bitterness",
+        "rho": 0.5131
+      },
+      {
+        "sens": "F_esters_ethac",
+        "feat": "ethyl_acetate",
+        "rho": 0.5031
+      }
+    ]
+  },
+  "style_kruskal": {
+    "n_features": 231,
+    "n_tested": 231,
+    "n_sig_05": 205,
+    "n_sig_bonferroni": 148,
+    "median_eps2": 0.17676491457831522,
+    "max_eps2": 0.7910098808041285,
+    "n_eps2_gt_0.14": 144,
+    "n_styles": 22
+  },
+  "plot_data": {
+    "box_raw_cols": 194,
+    "n_missing_cols": 9,
+    "n_floor_gt30": 40,
+    "max_floor_share": 0.848,
+    "n_groups": 7
+  },
+  "crosscheck": {
+    "official_2csv": {
+      "n_rows_official": 231,
+      "n_rows_mapped_to_226": 212,
+      "n_compared_pairs": 44732,
+      "median_abs_diff": 8.326672684688674e-17,
+      "p90_abs_diff": 4.163336342344337e-16,
+      "max_abs_diff": 6.661338147750939e-16,
+      "pearson_agreement": 1.0
+    },
+    "official_6csv": {
+      "n_rows": 44,
+      "n_rows_mapped": 44,
+      "n_cols": 50,
+      "n_cols_mapped": 49,
+      "n_compared_cells": 2156,
+      "median_abs_diff": 5.551115123125783e-17,
+      "pearson_agreement": 0.9999999999999999,
+      "coverage_of_226x50": 0.1867
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "box_raw_cols": 194,
+  "n_missing_cols": 9,
+  "n_floor_gt30": 40,
+  "max_floor_share": 0.848,
+  "n_groups": 7
+}
