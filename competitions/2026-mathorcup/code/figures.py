@@ -769,10 +769,14 @@ def fig_q2_jaccard():
     ax.set_ylabel('Top-10 入选集合的 Jaccard 相似度', fontsize=10.5)
     ax.set_ylim(-0.03, 0.62)
     ax.tick_params(axis='y', labelsize=9.5)
+    # 这行统计原来排成单行，9 pt 下宽 224.5 pt、右端到 291.1 pt，而右上图例从
+    # 290.85 pt 起——两者直接贴上，读起来像 "n=50▭ 四分位箱"。拆成两行后第一行
+    # 只有 139.9 pt，留出 84 pt 空档。
     ax.text(0.02, 0.97,
-            f'三法平均：中位 {st["median"]:.3f}，IQR {st["iqr"]:.3f}，'
+            f'三法平均：中位 {st["median"]:.3f}，IQR {st["iqr"]:.3f}\n'
             f'最低 {st["min"]:.3f}；n={int(st["n_targets"])}',
-            transform=ax.transAxes, fontsize=9, va='top', color=C_DEEP)
+            transform=ax.transAxes, fontsize=9, va='top', color=C_DEEP,
+            linespacing=1.5)
     handles = [Patch(facecolor=C_BLUE, alpha=0.40, edgecolor=COOL_EDGE, label='四分位箱'),
                Line2D([], [], color=C_DEEP, lw=1.8, label='中位数'),
                Line2D([], [], color=C_BLUE, marker='o', lw=0, ms=4, alpha=0.6,
