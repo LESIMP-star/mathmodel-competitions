@@ -147,6 +147,18 @@ def _style_ax(ax, ygrid=True, spines=True):
     ax.set_axisbelow(True)
 
 
+def _diag_dir(ax):
+    """y=x 这条对角线在屏幕坐标下的单位方向向量与单位法向。
+
+    x、y 两轴量纲不同，数据坐标里的 45° 在屏幕上并不是 45°，所以必须先把
+    两端点转到显示坐标再取方向；否则"垂直于对角线"的偏移会偏掉。
+    法向指向图区左上（即点在对角线上方时该走的方向）。
+    """
+    (x0, y0), (x1, y1) = ax.transData.transform([(0.0, 0.0), (1.0, 1.0)])
+    theta = np.arctan2(y1 - y0, x1 - x0)
+    return np.cos(theta), np.sin(theta), -np.sin(theta), np.cos(theta)
+
+
 def _pcolormesh(ax, M, x_labels, y_labels, cmap, cbar_label=None, vmin=None,
                 vmax=None, annotate=False, fmt='{:.2f}', annot_fontsize=7):
     """用 pcolormesh 画热力图。
@@ -363,16 +375,40 @@ def fig_q1_external():
     ax.axvline(0.0, color=COOL_GRID, linewidth=1.0)
     ax.scatter(e.rho_label7_vs_4, e.rho_pred_vs_7, s=58, color=C_BLUE, marker='o',
                edgecolor='white', linewidth=0.9, zorder=3, label=f'{len(e)} 组对齐概念')
-    # 只标偏离对角线最大的 3 点（全标会叠成一团）
-    dev = (e.rho_pred_vs_7 - e.rho_label7_vs_4).abs().sort_values(ascending=False)
-    for i in dev.index[:3]:
-        r = e.loc[i]
-        ax.annotate(r.sens_4csv, (r.rho_label7_vs_4, r.rho_pred_vs_7),
-                    xytext=(5, -10), textcoords='offset points', fontsize=9, color=C_DEEP)
-    ax.set_xlabel('标签信号：$\\rho$(4.csv 感官分, 7.csv 对应词)', fontsize=10.5)
-    ax.set_ylabel('模型信号：$\\rho$(模型预测, 7.csv 对应词)', fontsize=10.5)
+    # 只标偏离对角线最大的 3 点（全标会叠成一团）。先定坐标范围，后面按最终
+    # 比例算屏幕法向。
     ax.set_xlim(-0.15, 0.78)
     ax.set_ylim(-0.15, 0.78)
+    # 标签放在 y=x 的外侧并加引线。原来固定 (5,-10) 偏移（右下），而这三点都在
+    # 对角线上方，右下正好朝参考线走——文字被虚线从中间穿过；diacetyl 与 dms
+    # 在屏幕上只隔 6 pt，固定偏移还会让两个标签叠在一起。
+    dev = (e.rho_pred_vs_7 - e.rho_label7_vs_4).abs().sort_values(ascending=False)
+    ux, uy, nx, ny = _diag_dir(ax)            # 对角线方向 / 法向（法向指左上）
+    px_per_pt = fig.dpi / 72.0
+    seen = []
+    for i in dev.index[:3]:
+        r = e.loc[i]
+        p = ax.transData.transform((r.rho_label7_vs_4, r.rho_pred_vs_7))
+        # 与已标点的屏幕距离过近时，沿对角线方向错开，且朝远离那个点的一侧
+        # 走。不能翻到对角线另一侧：这两个点本就离线不远，翻过去标签正好压在
+        # 线上（dms 离线只有 15.6 pt）。
+        shift = 0.0
+        for q in seen:
+            if np.hypot(*(p - q)) < 14 * px_per_pt:
+                shift = -26.0 * (np.sign((p - q) @ np.array([ux, uy])) or 1.0)
+                break
+        seen.append(p)
+        above = 1.0 if r.rho_pred_vs_7 >= r.rho_label7_vs_4 else -1.0
+        ox = above * 15 * nx + shift * ux
+        oy = above * 15 * ny + shift * uy
+        ax.annotate(r.sens_4csv, (r.rho_label7_vs_4, r.rho_pred_vs_7),
+                    xytext=(ox, oy), textcoords='offset points',
+                    fontsize=9, color=C_DEEP,
+                    ha='right' if ox < 0 else 'left',
+                    va='bottom' if oy > 0 else 'top',
+                    arrowprops=dict(arrowstyle='-', color=C_GRAY, lw=0.9))
+    ax.set_xlabel('标签信号：$\\rho$(4.csv 感官分, 7.csv 对应词)', fontsize=10.5)
+    ax.set_ylabel('模型信号：$\\rho$(模型预测, 7.csv 对应词)', fontsize=10.5)
     ax.tick_params(labelsize=9.5)
     ax.legend(loc='upper left', fontsize=9)
     txt = (f'中位 $R^2_{{pred}}$ = {log["ext_median_r2_pred_vs_7"]:+.3f}\n'
