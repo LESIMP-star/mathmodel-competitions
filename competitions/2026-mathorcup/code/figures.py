@@ -1046,11 +1046,16 @@ def fig_q3_radar():
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels([DIM_ZH[d] for d in dims], fontsize=10)
     ax.tick_params(axis='y', labelsize=7.5)
-    ax.set_rlabel_position(72)
+    # 径向刻度原来钉在 72°，而 10 根轴正好每 36° 一根（0/36/72…），
+    # 于是"2.0""1.5"直接压在 72° 那根轴的标签"酯香"上。90° 落在 72° 与 108°
+    # 两根轴的缝隙里，刻度标签就不会再和轴标签相撞。
+    ax.set_rlabel_position(90)
     ax.grid(color=COOL_GRID, linewidth=0.7)
     ax.spines['polar'].set_color(COOL_EDGE)
     ax.spines['polar'].set_linewidth(1.0)
-    ax.legend(loc='upper right', bbox_to_anchor=(1.32, 1.14), fontsize=8.5)
+    # 图例右移 + 收窄（字号 8.5->8.0、手柄 2.0->1.0），左缘让开 72° 的"酯香"
+    ax.legend(loc='upper right', bbox_to_anchor=(1.35, 1.20), fontsize=8.0,
+              handlelength=1.0)
     return finalize_figure(fig, OUT / 'fig_q3_radar')
 
 
