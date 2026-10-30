@@ -326,6 +326,9 @@ def fig_q1_r2_forest():
     for lbl in ax.get_yticklabels():
         if lbl.get_text().startswith('其余'):
             lbl.set_fontstyle('italic')
+    # 注意：这条参考线的说明仍是图内文字，没有按 C-3 转成图例。原因见
+    # 提交说明——这张图走 style 库的 make_forest_plot，本地无法重画核验，
+    # 改了代码就会和已提交的 PNG 对不上，所以留待能重画时再改。
     ax.axvline(0.21, color=C_WARN, linestyle=':', linewidth=1.4)
     ax.text(0.215, len(f) - 0.6, '文献天花板 $R^2\\approx0.21$',
             color=C_WARN, fontsize=9, va='top')
@@ -922,16 +925,20 @@ def fig_q3_front():
     # 基线 f1（不改动时的偏差）由 q3_waterfall.csv 的 baseline 行给出
     wf = _read('q3_waterfall.csv')
     base = wf[wf.group == '__baseline__']
+    f1_base = None
     if len(base):
         f1_base = float(base.f1_after.iloc[0])
         for ax in axes:
             ax.axvline(f1_base, color=C_DEEP, linestyle=':', linewidth=1.2)
-        axes[0].text(f1_base, axes[0].get_ylim()[1] * 0.98, f' 基线 $f_1$={f1_base:.2f}',
-                     fontsize=9, color=C_DEEP, va='top', ha='left')
+        # C-3：参考线用图例，不要在图上写字。原来在轴右侧写"基线 f1=48.96"，
+        # 属于图内文字；改成图例第三条（字没变），也免得它顶到画布右边。
     handles = [Line2D([], [], color=C_GRAY, marker='o', lw=0, ms=5, alpha=0.7,
                       label=f'NSGA-II（{len(heur)} 点）'),
                Line2D([], [], color=C_WARN, marker='*', lw=0, ms=10,
                       markeredgecolor=C_DEEP, label=f'Gurobi MILP（{len(milp)} 点）')]
+    if f1_base is not None:
+        handles.append(Line2D([], [], color=C_DEEP, ls=':', lw=1.2,
+                              label=f'基线 $f_1$={f1_base:.2f}'))
     # 图例原来在 upper right，而 NSGA-II 的 115 个点正好堆在那一角（f1 35–45、
     # f3 18–25），图标和文字直接压在点云上。面板 (a) 的左上角是空的（MILP 星
     # 最高只到 f3≈11、最左 f1≈20.8，点云从 f1≈34 才开始），挪过去即可。
