@@ -935,9 +935,13 @@ def fig_q3_deltas():
     lim = float(np.abs(M.to_numpy()).max())
 
     fig, ax = plt.subplots(figsize=(5.2, 4.0))
+    # 格子只有 14.6 pt 宽，而两位小数在 7.5 pt 下要 18.3 pt——每格左右各溢出
+    # 3.7 pt，相邻两格的数字连成一片（"-7.04" + "0.00" 读成 "7.040.00"）。
+    # 实测一字宽预算 13.4 pt：改 1 位小数 + 6.5 pt 后 "-7.0" 只有 11.9 pt，
+    # 格内还剩 2.7 pt 余量；再小就会低于 6 pt 下限。
     _pcolormesh(ax, M.to_numpy(), M.columns.tolist(), ylabels, CMAP_DIV,
                 cbar_label='$\\Delta$（$\\log_{10}$ 域浓度调整量）',
-                vmin=-lim, vmax=lim, annotate=True, fmt='{:.2f}', annot_fontsize=7.5)
+                vmin=-lim, vmax=lim, annotate=True, fmt='{:.1f}', annot_fontsize=6.5)
     ax.tick_params(axis='x', labelsize=8.5, rotation=45)
     for lbl in ax.get_xticklabels():
         lbl.set_ha('right')
