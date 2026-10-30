@@ -685,14 +685,24 @@ def fig_q2_graph():
     ax.plot(d.tau, d.spectral_Q_fix, '-s', ms=3.0, lw=1.1, color=C_GRAY,
             label='谱聚类（归一化 $L$）$Q$')
     ax.axvline(s['main_tau'], ls=':', lw=1.0, color=C_DEEP)
+    # 标注挪到竖线左侧的空白里：原来放在 (τ+0.012, 0.30)，而零分布 95% 分位
+    # 那条橙色虚线是斜的（0.25→0.39），从文字左端下方穿到右端上方，整段字都被
+    # 斜线切过。新位置在虚线之下、灰色方块之上，两头都不碰。
     ax.annotate(f'主阈值 $\\tau$={s["main_tau"]:.2f}',
-                xy=(s['main_tau'], 0.02), xytext=(s['main_tau'] + 0.012, 0.30),
+                xy=(s['main_tau'], 0.03),
+                xytext=(s['main_tau'] - 0.14, 0.055),
                 fontsize=6.4, color=C_DEEP,
                 arrowprops=dict(arrowstyle='-', lw=0.6, color=C_DEEP))
     ax.set_xlabel('边阈值 $\\tau$（$|\\rho|\\geq\\tau$）', fontsize=8.4)
     ax.set_ylabel('模块度 $Q$', fontsize=8.4)
     ax.tick_params(labelsize=7.4)
-    ax.legend(frameon=False, fontsize=6.4, loc='upper left')
+    # 主阈值竖虚线是画满整个高度的，而图例放在左上、宽度占了轴宽的 2/3，
+    # 虚线正好从"95% 分位"和"Q"中间穿过去，字被切成两半。图例加不透明白底，
+    # 让虚线从图例后面走；这块区域（Q 0.47–0.63）没有曲线，白底不遮数据。
+    ax.legend(frameon=True, facecolor='white', edgecolor=COOL_GRID,
+              framealpha=1.0, fontsize=6.4, loc='upper left',
+              bbox_to_anchor=(0.012, 1.0), borderaxespad=0.0,
+              borderpad=0.45, handletextpad=0.55)
     _style_ax(ax)
     add_panel_label(ax, '(a)', x=-0.22, y=1.04, fontsize=7.8)
 
@@ -705,7 +715,8 @@ def fig_q2_graph():
     ax.plot(x, d.within_between_louvain, '-s', ms=3.0, lw=1.3, color=C_BLUE,
             label='Louvain')
     ax.axhline(1.0, ls=':', lw=1.0, color=C_DEEP)
-    ax.text(0.1, 1.03, '比值 = 1（社区无信息）', fontsize=6.4, color=C_DEEP)
+    # y=1.03 时 6.4 pt 字的下缘正好压在这条 y=1 的点线上，抬到 1.10 留出约 3 pt。
+    ax.text(0.1, 1.10, '比值 = 1（社区无信息）', fontsize=6.4, color=C_DEEP)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{t:.2f}' for t in d.tau], fontsize=7.0, rotation=45)
     ax.set_xlabel('边阈值 $\\tau$', fontsize=8.4)
@@ -713,8 +724,12 @@ def fig_q2_graph():
     ax.tick_params(axis='y', labelsize=7.4)
     ax.set_ylim(0.9, max(d.within_between_fix.max(),
                          d.within_between_louvain.max()) * 1.32)
-    ax.legend(frameon=False, fontsize=6.2, loc='upper center',
-              ncol=3, columnspacing=0.9, handletextpad=0.4)
+    # 三个条目横排会撑到 183 pt，而这块面板只有 139 pt 宽，图例因此整体溢出到
+    # 坐标轴外、压住 y 轴刻度。改两列后宽约 100 pt，能完整落在轴内；再加白底，
+    # 因为第二行正好压在 3.0 那条 y 网格线上。
+    ax.legend(frameon=True, facecolor='white', edgecolor=COOL_GRID,
+              framealpha=1.0, fontsize=6.2, loc='upper left', ncol=2,
+              columnspacing=0.9, handletextpad=0.4, borderpad=0.4)
     _style_ax(ax)
     add_panel_label(ax, '(b)', x=-0.24, y=1.04, fontsize=7.8)
 
