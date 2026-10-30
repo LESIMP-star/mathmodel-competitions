@@ -1104,11 +1104,20 @@ def fig_q3_waterfall():
         before = float(r.f1_after) - float(r.delta_f1)
         delta = float(r.delta_f1)
         bottom = min(before, float(r.f1_after))
+        bar_c = C_TEAL if delta < 0 else C_WARN
         ax.bar(x[i], abs(delta), bottom=bottom, width=0.62,
-               color=C_TEAL if delta < 0 else C_WARN, alpha=0.85, edgecolor='white')
-        ax.text(x[i], float(r.f1_after) - abs(delta) / 2.0, f'{delta:+.2f}',
-                ha='center', va='center', fontsize=8.5,
-                color='white' if abs(delta) > 2.0 else C_DEEP)
+               color=bar_c, alpha=0.85, edgecolor='white')
+        # 文字颜色按柱色亮度定：teal 加 0.85 透明度后接近 #4fb3ab，白字几乎
+        # 看不见——原来按 |Δ|>2 一律抹白字，结果 Hops/Spices/Yeast/Malt 四根
+        # 大跌柱的 Δ 全是隐形的（图上那几根柱是空的）。
+        r_, g_, b_ = matplotlib.colors.to_rgb(bar_c)
+        lum = (0.299 * r_ + 0.587 * g_ + 0.114 * b_) * 0.85 + 0.15
+        # 竖直居中：柱体跨度是 [min(before, after), max(before, after)]，原来
+        # 写的是 f1_after - |Δ|/2，对下降柱会落到柱体下方——Others 那根
+        # -1.63 就掉在柱外，压在连接线上。
+        cy = bottom + abs(delta) / 2.0
+        ax.text(x[i], cy, f'{delta:+.2f}', ha='center', va='center',
+                fontsize=8.5, color='white' if lum < 0.55 else C_DEEP)
     # 末柱：收敛后的绝对值
     final = float(steps.f1_after.iloc[-1]) if len(steps) else base
     ax.bar(x[-1], final, width=0.62, color=C_DEEP, alpha=0.9, edgecolor='white')
