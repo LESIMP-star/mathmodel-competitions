@@ -17,14 +17,20 @@
      0.85\\textwidth 排 = 385.5 pt = 5.35 in。故单面板宽 ≤5.4 in、双面板 ≤6.4 in，
      否则缩放后字号会掉到 6 pt 以下（这正是旧版 9 张图字号全崩的根因）。
 
-十六张图的证据分工
+二十一张图的证据分工
+  Q0  fig_q0_missing          缺失结构与检出限地板值占比
+  Q0  fig_q0_box_before_after 量纲统一前后（raw vs log10）箱线
+  --  fig_flow                全文技术路线（四行：数据体检 → Q1 → Q2 → Q3）
   Q1  fig_q1_r2_forest        逐维 R² 及 bootstrap 95% 区间（Top-10 + 聚合 + Bottom-5）
   Q1  fig_q1_r2_dist          50 维 R² 的分布形态（直方 + 核密度，标中位数/天花板）
-  Q1  fig_q1_floor_vs_r2      地板质量 vs R² + OLS 线 —— 失效诊断
+  Q1  fig_q1_reg_fit          四个代表项的折外预测 vs 实测散点 —— 拟合形态
+  Q1  fig_q1_residual         alcohol 项残差四项诊断（散点/QQ/直方/序列）
+  Q1  fig_q1_floor_vs_r2      左尾占比 vs R² + OLS 线 —— 失效诊断
   Q1  fig_q1_external         标签信号 vs 模型信号在 7.csv 上的效度 —— 外部效度
+  Q2  fig_q2_graph            共表达图结构诊断（Louvain 模块度 + 三种聚类对比）
   Q2  fig_q2_pi_heatmap       化合物 × 感官的逐列置换重要性 —— 主证据
   Q2  fig_q2_jaccard          跨模型 Top-10 稳定性 —— 负结果
-  Q2  fig_q2_oav              OAV 排序 —— 化学合理性裁判
+  Q2  fig_q2_oav              浓度/阈值比排序 —— 化学合理性裁判
   Q2  fig_q2_convergence      π 的 bootstrap 收敛曲线 —— 200 次重采样是否够
   Q3  fig_q3_front            Pareto 前沿双投影，MILP vs NSGA-II —— 主证据
   Q3  fig_q3_deltas           每个 Pareto 点改了哪些化合物、改多少
@@ -32,8 +38,7 @@
   Q3  fig_q3_surrogate_err    代理误差上界 / 标准差 —— 负结果
   Q3  fig_q3_radar            目标风格 / 对照风格 / 最优解代理预测的三线画像
   Q3  fig_q3_waterfall        最优 Pareto 点的 f1 逐组分解
-  Q0  fig_q0_box_before_after 量纲统一前后（raw vs log10）箱线
-  Q0  fig_q0_missing          缺失结构与检出限地板值占比
+  Q3  fig_q3_tornado          六参数单因素扰动的 f1 极差 —— 灵敏度
 
 本程序及代码是在 AI 工具辅助下完成的。
 # AI 工具名称：Hermes Agent（Nous Research），底层模型 deepseek-v4-flash，
