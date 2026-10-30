@@ -821,7 +821,15 @@ def fig_q2_oav():
     handles = [Line2D([], [], color=band_color[k], marker=m, lw=1.8, ms=6,
                       label=band_label[k])
                for k, m in (('ge1', 'D'), ('mid', 's'), ('low', 'o'))]
-    ax.legend(handles=handles, loc='lower right', fontsize=8.5)
+    # 图例原来放 lower right，正好插在最后三行（ethyl.butyrate /
+    # phenethyl_alcohol / 其余 15 个）中间：21 行铺满了整个绘图区，里面找不到
+    # 任何一处空白放得下 156 pt 宽的图例，而且 OAV=0.5 与 OAV=1 两条竖参考线会
+    # 直接从图例文字里穿过。改为把绘图区顶部让出 45 pt，图例横排到图上方，
+    # 不遮任何数据、也不与参考线相交。
+    fig.subplots_adjust(top=0.84)
+    ax.legend(handles=handles, loc='lower left', bbox_to_anchor=(0.0, 1.005),
+              fontsize=8.5, ncol=1, frameon=False, labelspacing=0.6,
+              borderaxespad=0)
     _style_ax(ax, ygrid=False)
     ax.grid(axis='x', color=COOL_GRID, linewidth=0.7)
     ax.grid(axis='y', visible=False)
