@@ -91,7 +91,7 @@ ALLOW = ('修复说明_问题三目标口径.md', '论文核对清单', '修复�
          'fix_', 'dump_q3_truth.py', 'audit_paper.py', 'selftest.py',
          'verify_delivery.py', 'rebuild_delivery.py', 'audit_consistency.py',
          'sync_q3_numbers.py', '整理说明.md', '问题一_内层交叉验证预处理核查.md',
-         '_archive', '_bak_placeholder')
+         '_archive', '_bak_placeholder', 'push_repo.py', '赛题要求核对表.md')
 for k, lst in hits.items():
     real = [(r, w) for r, w in lst if not any(a in r for a in ALLOW)]
     if real:
