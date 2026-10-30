@@ -346,9 +346,12 @@ def fig_q1_floor_vs_r2():
     ax.set_ylabel('嵌套交叉验证 $R^2$', fontsize=10.5)
     ax.set_xlim(-0.03, 0.83)
     ax.tick_params(labelsize=9.5)
-    ax.legend(loc='upper right', fontsize=9)
-    # 标注两个极端点，坐标取自 q1_metrics.csv
-    for name, dx, dy in (('alcohol', 0.03, -0.02), ('barnyard', -0.24, 0.03)):
+    ax.legend(loc='upper center', fontsize=9)
+    # 标注两个极端点，坐标取自 q1_metrics.csv。偏移按当前数据手调：
+    # alcohol 所在的 (0.01, 0.71) 旁边 0.048 处还有一个近重合的点，标签必须
+    # 往下让开它，否则字压在点上；barnyard 的点在 x≈0.47，原来把标签放在
+    # x≈0.24（-0.24）——那一片正好是蓝点最密的地方，整段文字都压在点上。
+    for name, dx, dy in (('alcohol', 0.03, -0.05), ('barnyard', -0.16, 0.02)):
         row = m[m.sens == name]
         if len(row):
             fx, fy = float(row.floor_mass.iloc[0]), float(row.R2.iloc[0])
