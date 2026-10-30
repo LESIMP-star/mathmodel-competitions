@@ -52,11 +52,11 @@ def clone():
 USED = clone()
 
 
-def cp_tree(src, dst, skip=()):
+def cp_tree(src, dst, skip=(), drop=()):
     os.makedirs(dst, exist_ok=True)
     n = 0
     for f in os.listdir(src):
-        if f in skip:
+        if f in skip or any(f.startswith(p) or f.endswith(p) for p in drop):
             continue
         s, d = os.path.join(src, f), os.path.join(dst, f)
         if os.path.isdir(s):
@@ -72,8 +72,8 @@ if os.path.isdir(DEST):
     shutil.rmtree(DEST)
 os.makedirs(DEST)
 
-# ① code/
-print(f'✓ code/  {cp_tree(os.path.join(ROOT, "code"), os.path.join(DEST, "code"), skip=("__pycache__",))} 项')
+# ① code/（跳过运行日志与缓存）
+print(f'✓ code/  {cp_tree(os.path.join(ROOT, "code"), os.path.join(DEST, "code"), skip=("__pycache__",), drop=("log_", ".log", ".pyc"))} 项')
 
 # ② results/
 RES = os.path.join(DEST, 'results')
