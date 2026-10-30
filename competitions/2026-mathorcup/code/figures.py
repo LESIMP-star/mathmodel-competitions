@@ -837,7 +837,13 @@ def fig_q2_convergence():
     ax.set_ylabel('香气特征池内的平均入选率 $\\bar{\\pi}$', fontsize=10.5)
     ax.tick_params(labelsize=9.5)
     ax.set_xlim(1, len(c))
-    ax.legend(loc='lower right', fontsize=9)
+    # p5–p95 带铺满整个绘图区宽度，"跨靶 5–95 分位"这一行原本落在带的下边缘上：
+    # 浅蓝色的带色块画在浅蓝底上等于看不见，文字还被带的下边界从中间切开。
+    # 两条一起改——图例挪到带顶部以上的白边里（那里没有任何数据），
+    # 再加白底和一圈浅灰细线，即使以后带宽变化也不会再糊在一起。
+    ax.legend(loc='upper right', fontsize=9, frameon=True, facecolor='white',
+              edgecolor=COOL_GRID, framealpha=1.0, borderpad=0.5,
+              labelspacing=0.5)
     _style_ax(ax)
     return finalize_figure(fig, OUT / 'fig_q2_convergence')
 
