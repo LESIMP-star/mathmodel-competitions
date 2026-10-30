@@ -1,0 +1,24 @@
+E:\知识库\Mathmodel all\mathorcup大数据\2026\code\figures.py:423: SyntaxWarning: invalid escape sequence '\g'
+  handles = [Patch(facecolor=C_BLUE2, alpha=0.55, edgecolor='white', label='$R^2\geq0$'),
+  ✓ flow                 → fig_flow.png, fig_flow.svg
+  ✓ q0_box_before_after  → fig_q0_box_before_after.png, fig_q0_box_before_after.svg
+  ✓ q0_missing           → fig_q0_missing.png, fig_q0_missing.svg
+  ✓ q1_r2_forest         → fig_q1_r2_forest.png, fig_q1_r2_forest.svg
+  ✓ q1_floor_vs_r2       → fig_q1_floor_vs_r2.png, fig_q1_floor_vs_r2.svg
+  ✓ q1_external          → fig_q1_external.png, fig_q1_external.svg
+  ✓ q1_r2_dist           → fig_q1_r2_dist.png, fig_q1_r2_dist.svg
+  ✓ q1_reg_fit           → fig_q1_reg_fit.png, fig_q1_reg_fit.svg
+  ✓ q1_residual          → fig_q1_residual.png, fig_q1_residual.svg
+  ✓ q2_pi_heatmap        → fig_q2_pi_heatmap.png, fig_q2_pi_heatmap.svg
+  ✓ q2_graph             → fig_q2_graph.png, fig_q2_graph.svg
+  ✓ q2_jaccard           → fig_q2_jaccard.png, fig_q2_jaccard.svg
+  ✓ q2_oav               → fig_q2_oav.png, fig_q2_oav.svg
+  ✓ q2_convergence       → fig_q2_convergence.png, fig_q2_convergence.svg
+  ✓ q3_front             → fig_q3_front.png, fig_q3_front.svg
+  ✓ q3_deltas            → fig_q3_deltas.png, fig_q3_deltas.svg
+  ✓ q3_surrogate_cv      → fig_q3_surrogate_cv.png, fig_q3_surrogate_cv.svg
+  ✓ q3_surrogate_err     → fig_q3_surrogate_err.png, fig_q3_surrogate_err.svg
+  ✓ q3_radar             → fig_q3_radar.png, fig_q3_radar.svg
+  ✓ q3_waterfall         → fig_q3_waterfall.png, fig_q3_waterfall.svg
+  ✓ q3_tornado           → fig_q3_tornado.png, fig_q3_tornado.svg
+共 21 图 / 42 个文件 → E:\知识库\Mathmodel all\mathorcup大数据\2026\latex模板\figures

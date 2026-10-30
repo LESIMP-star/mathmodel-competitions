@@ -207,7 +207,7 @@ def spectral_embed(A, k, normalized=False):
 
 \subsubsection*{A.4.7\quad MILP 的矩阵装配}
 
-对应式 (15)--(17)；源码 \texttt{code/q3.py} 的 L296--L415。
+对应式 (15)--(17)；源码 \texttt{code/q3.py} 的 L296--L425。
 
 \begin{lstlisting}[language=Python]
 def build_arrays(n, ns, kh_idx, ks_idx, x0, lb, ub, targ, B, C, w,
@@ -229,6 +229,15 @@ def build_arrays(n, ns, kh_idx, ks_idx, x0, lb, ub, targ, B, C, w,
     i_z = 3 * n + 2 * ns
 
     span = np.maximum(ub - lb, 1e-9)
+    # wj = 1/可行域宽度：把 dp/dn 折算成"占可行域的比例"。
+    # 必要性：决策列并非同域——X2.methyltetrahydrofuran.3.one 与
+    # X2.3.butanedione 是线性浓度（宽 29.1 与 87.5），其余是 log10
+    # 浓度（宽约 6.9）。若 f3=Σ|x−x0| 直接相加，等于把线性列的
+    # 浓度差和 log10 列的对数差混在一个量纲里，f3 会被前两列支配。
+    # **必须在 build_arrays 里定义一次、三处共用**（ε3 约束、默认目标、
+    # metrics_of），否则约束与指标的 f3 不是同一把尺子：
+    # 实测过约束用未加权 lam 时 e_f3=10.2245 而 f3=7.4510。
+    wj = 1.0 / span
     M = np.maximum.reduce([np.abs(ub - x0), np.abs(x0 - lb)])
     M = np.maximum(M, 1e-6)
     # z 的上界必须取"变量上下界内**物理可达**的最大违反量"，不能用一个拍脑袋的
@@ -300,7 +309,9 @@ def build_arrays(n, ns, kh_idx, ks_idx, x0, lb, ub, targ, B, C, w,
     if np.isfinite(e_f3):
         for j in range(n):
             add(r, i_y + j, gamma)
-            add(r, i_dp + j, lam); add(r, i_dn + j, lam)
+            # 加权必须与 metrics_of / _obj_vec 一致：三处都用 lam*wj，
+            # 否则 ε-约束的上界与报告的 f3 不是同一把尺子。
+            add(r, i_dp + j, lam * wj[j]); add(r, i_dn + j, lam * wj[j])
         rhs.append(e_f3); r += 1
 
     A_ub = sp.csr_matrix((vals, (rows, cols)), shape=(r, nv))
@@ -310,8 +321,11 @@ def build_arrays(n, ns, kh_idx, ks_idx, x0, lb, ub, targ, B, C, w,
     c[i_up:i_up + ns] = w
     c[i_um:i_um + ns] = w
     c[i_y:i_y + n] = gamma
-    c[i_dp:i_dp + n] = lam
-    c[i_dn:i_dn + n] = lam
+    # f3 的幅度项必须按 wj 归一，与 ε3 约束、metrics_of、_obj_vec 完全一致。
+    # 这四处原先有三处带 wj、一处不带，导致「求解的目标」和「报告的指标」不是
+    # 同一个 f3（实测 e_f3=10.2245 vs f3=7.4510）。
+    c[i_dp:i_dp + n] = lam * wj
+    c[i_dn:i_dn + n] = lam * wj
 
     bounds = ([(0.0, M[j]) for j in range(n)] +
               [(0.0, M[j]) for j in range(n)] +
@@ -323,12 +337,8 @@ def build_arrays(n, ns, kh_idx, ks_idx, x0, lb, ub, targ, B, C, w,
 
     return dict(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds, integrality=integrality,
                 nv=nv, n=n, ns=ns, nk=nk, base=base,
-                # wj = 1/可行域宽度：把 dp/dn 折算成"占可行域的比例"。
-                # 必要性：决策列并非同域——X2.methyltetrahydrofuran.3.one 与
-                # X2.3.butanedione 是线性浓度（宽 29.1 与 87.5），其余是 log10
-                # 浓度（宽约 6.9）。若 f3=Σ|x−x0| 直接相加，等于把线性列的
-                # 浓度差和 log10 列的对数差混在一个量纲里，f3 会被前两列支配。
-                wj=1.0 / np.maximum(ub - lb, 1e-9),
+                # wj 在函数开头定义，ε3 约束、默认目标 c、metrics_of 三处共用
+                wj=wj,
                 idx=dict(dp=i_dp, dn=i_dn, y=i_y, up=i_up, um=i_um, z=i_z))
 \end{lstlisting}
 

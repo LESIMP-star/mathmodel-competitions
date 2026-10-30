@@ -1,31 +1,31 @@
 ﻿dim,series,value
 A_malt_all,Tripel（目标风格实测）,-0.0515
 A_malt_all,Kriek（对照风格实测）,-0.5012
-A_malt_all,Tripel（最优 Pareto 点代理预测）,-0.1253
+A_malt_all,Tripel（最优 Pareto 点代理预测）,-0.0632
 A_hops_all,Tripel（目标风格实测）,0.0792
 A_hops_all,Kriek（对照风格实测）,-0.8284
-A_hops_all,Tripel（最优 Pareto 点代理预测）,0.0614
+A_hops_all,Tripel（最优 Pareto 点代理预测）,0.0828
 A_esters_all,Tripel（目标风格实测）,0.1091
 A_esters_all,Kriek（对照风格实测）,0.7624
-A_esters_all,Tripel（最优 Pareto 点代理预测）,0.1802
+A_esters_all,Tripel（最优 Pareto 点代理预测）,0.2608
 F_malt_all,Tripel（目标风格实测）,0.0969
 F_malt_all,Kriek（对照风格实测）,-0.7377
-F_malt_all,Tripel（最优 Pareto 点代理预测）,-0.1400
+F_malt_all,Tripel（最优 Pareto 点代理预测）,-0.0524
 F_hops_all,Tripel（目标风格实测）,0.1228
 F_hops_all,Kriek（对照风格实测）,-0.9192
-F_hops_all,Tripel（最优 Pareto 点代理预测）,0.0466
+F_hops_all,Tripel（最优 Pareto 点代理预测）,0.0469
 F_esters_all,Tripel（目标风格实测）,0.1296
 F_esters_all,Kriek（对照风格实测）,0.6051
-F_esters_all,Tripel（最优 Pareto 点代理预测）,0.0167
+F_esters_all,Tripel（最优 Pareto 点代理预测）,0.1080
 bitternes,Tripel（目标风格实测）,0.2277
 bitternes,Kriek（对照风格实测）,-1.0262
-bitternes,Tripel（最优 Pareto 点代理预测）,-0.2921
+bitternes,Tripel（最优 Pareto 点代理预测）,-0.2299
 sweetness,Tripel（目标风格实测）,-0.0843
 sweetness,Kriek（对照风格实测）,0.4425
-sweetness,Tripel（最优 Pareto 点代理预测）,0.0792
+sweetness,Tripel（最优 Pareto 点代理预测）,0.0863
 acidity,Tripel（目标风格实测）,-0.3367
 acidity,Kriek（对照风格实测）,1.8562
-acidity,Tripel（最优 Pareto 点代理预测）,0.4889
+acidity,Tripel（最优 Pareto 点代理预测）,0.1642
 body,Tripel（目标风格实测）,0.1944
 body,Kriek（对照风格实测）,-0.4877
-body,Tripel（最优 Pareto 点代理预测）,-0.2700
+body,Tripel（最优 Pareto 点代理预测）,-0.1489

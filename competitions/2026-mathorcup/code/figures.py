@@ -22,7 +22,7 @@
   Q1  fig_q1_r2_dist          50 维 R² 的分布形态（直方 + 核密度，标中位数/天花板）
   Q1  fig_q1_floor_vs_r2      地板质量 vs R² + OLS 线 —— 失效诊断
   Q1  fig_q1_external         标签信号 vs 模型信号在 7.csv 上的效度 —— 外部效度
-  Q2  fig_q2_pi_heatmap       化合物 × 感官的分组置换重要性 —— 主证据
+  Q2  fig_q2_pi_heatmap       化合物 × 感官的逐列置换重要性 —— 主证据
   Q2  fig_q2_jaccard          跨模型 Top-10 稳定性 —— 负结果
   Q2  fig_q2_oav              OAV 排序 —— 化学合理性裁判
   Q2  fig_q2_convergence      π 的 bootstrap 收敛曲线 —— 200 次重采样是否够
@@ -320,7 +320,7 @@ def fig_q1_floor_vs_r2():
         ax.scatter(d.floor_mass, d.R2, s=42, color=color, marker=marker,
                    edgecolor='white', linewidth=0.7, label=lab, zorder=3)
     ax.axhline(0.0, color=C_GRAY, linestyle='--', linewidth=1.1)
-    ax.set_xlabel('地板质量（该感官维取"未感知"下限的比例）', fontsize=10.5)
+    ax.set_xlabel('左尾占比（该感官维落在 $y_{min}+0.15$ 以内的比例）', fontsize=10.5)
     ax.set_ylabel('嵌套交叉验证 $R^2$', fontsize=10.5)
     ax.set_xlim(-0.03, 0.83)
     ax.tick_params(labelsize=9.5)
@@ -548,7 +548,7 @@ def fig_q1_residual():
 # ─────────────────────────────────────────────────────────────
 
 def fig_q2_pi_heatmap():
-    """化合物 × 感官的分组置换重要性（主证据）。
+    """化合物 × 感官的逐列置换重要性（主证据）。
 
     完全照队友 figs.py:508-550 的 fig_heat_clust 逻辑：
     ① 取重要性最强的前 TOPN 感官 × TOPN 化合物子阵（队友取 16，本图取 20）；
@@ -573,7 +573,7 @@ def fig_q2_pi_heatmap():
 
     pi = _read('q2_feature_pi.csv')
     feats = [c for c in pi.columns if c != 'sens']
-    V = pi[feats].to_numpy(dtype=float)                 # (50 感官, 226 化合物)
+    V = pi[feats].to_numpy(dtype=float)                 # (50 感官, 231 化合物)
     keep = V.max(axis=0) >= pi_thr
     feats_kept = [f for f, k in zip(feats, keep) if k]
     Vk = V[:, keep]                                     # (50, 46)
@@ -596,7 +596,7 @@ def fig_q2_pi_heatmap():
     # 宽扁版式：宽 6.5in = 468pt，落 \textwidth 后缩放 0.969（>0.95），字不会变小
     fig, ax = plt.subplots(figsize=(6.5, 4.9))
     mesh = _pcolormesh(ax, Vk, feats_kept, sens_kept, CMAP_SEQ,
-                       cbar_label='分组置换重要性 $\\pi$', vmin=0.0,
+                       cbar_label='逐列置换重要性 $\\pi$', vmin=0.0,
                        annotate=True, fmt='{:.2f}', annot_fontsize=5.6)
     ax.tick_params(axis='x', labelsize=6.4, rotation=90)
     ax.tick_params(axis='y', labelsize=6.8)
@@ -1069,20 +1069,20 @@ def fig_flow():
     # ── 第 0 行：数据体检 ──
     box(XC[0], YR[0], '附件 1–8\n化学 / 感官 / 阈值', C_PALE, C_BLUE2)
     box(XC[1], YR[0], '§5 数据体检\n6 处题面与实测矛盾', '#E8F1F5', C_BLUE, 7.6, True)
-    box(XC[2], YR[0], '统一数据底座 D0\n250×226 / 250×50', C_PALE, C_BLUE2)
+    box(XC[2], YR[0], '统一数据底座 D0\n250×231 / 250×50', C_PALE, C_BLUE2)
     hline(YR[0], XC[0] + W / 2, XC[1] - W / 2)
     hline(YR[0], XC[1] + W / 2, XC[2] - W / 2)
 
     # ── 第 1 行：Q1 ──
     box(XC[0], YR[1], 'Q1 标签口径\n连续强度（0–6 不可反解）', '#DDEFF2', C_TEAL, 7.6, True)
     box(XC[1], YR[1], '嵌套 CV 四模型竞速\nRidge / EN / LGBM / ET', '#DDEFF2', C_TEAL)
-    box(XC[2], YR[1], '$R^2$ 中位 0.1471\nhurdle 9 维 · 自助区间', '#DDEFF2', C_TEAL)
+    box(XC[2], YR[1], '$R^2$ 中位 0.1469\nhurdle 9 维 · 自助区间', '#DDEFF2', C_TEAL)
     hline(YR[1], XC[0] + W / 2, XC[1] - W / 2)
     hline(YR[1], XC[1] + W / 2, XC[2] - W / 2)
 
     # ── 第 2 行：Q2 ──
     box(XC[0], YR[2], 'Q2 共表达图诊断\n社区结构弱 → 改化学族', '#E4E8F5', C_PURPLE, 7.6, True)
-    box(XC[1], YR[2], '分组置换 $\\pi$ + FDR\n阈值 0.5022', '#E4E8F5', C_PURPLE)
+    box(XC[1], YR[2], '逐列置换 $\\pi$\n阈值 0.5022 · 10 条入选', '#E4E8F5', C_PURPLE)
     box(XC[2], YR[2], 'OAV 分级\nA19 / B8 / C40 / N83', '#E4E8F5', C_PURPLE)
     hline(YR[2], XC[0] + W / 2, XC[1] - W / 2)
     hline(YR[2], XC[1] + W / 2, XC[2] - W / 2)
@@ -1090,7 +1090,7 @@ def fig_flow():
     # ── 第 3 行：Q3 ──
     box(XC[0], YR[3], 'Q3 收缩高斯生成\nLedoit–Wolf $\\delta$=0.6844', '#E3F0EC', C_TEAL, 7.6, True)
     box(XC[1], YR[3], 'PLS(8) 线性代理\n$\\varepsilon$-约束 MILP', '#E3F0EC', C_TEAL)
-    box(XC[2], YR[3], '5 点 Pareto\n支配 NSGA-II 91.30%', '#E3F0EC', C_TEAL)
+    box(XC[2], YR[3], '7 点 Pareto\n支配 NSGA-II 92.17%', '#E3F0EC', C_TEAL)
     hline(YR[3], XC[0] + W / 2, XC[1] - W / 2)
     hline(YR[3], XC[1] + W / 2, XC[2] - W / 2)
 

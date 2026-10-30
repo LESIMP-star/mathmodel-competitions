@@ -68,11 +68,11 @@
       26.788566528800327
     ],
     "n_solve": 300,
-    "n_infeasible": 20,
+    "n_infeasible": 0,
     "payoff_min_f1_changed": 25
   },
-  "n_grid_points": 280,
-  "n_pareto": 5,
+  "n_grid_points": 300,
+  "n_pareto": 7,
   "all_points_feasible_nondominated": true,
   "baseline_x0": {
     "f1": 48.962012,
@@ -82,20 +82,20 @@
     ]
   },
   "compare": {
-    "n_exact": 5,
+    "n_exact": 7,
     "n_heur": 115,
-    "exact_dominates_heur": 0.9130434782608695,
+    "exact_dominates_heur": 0.9217391304347826,
     "heur_dominates_exact": 0.0,
-    "n_heur_dominated": 105,
+    "n_heur_dominated": 106,
     "n_exact_dominated": 0,
-    "hv_exact": 688.536666,
+    "hv_exact": 757.781889,
     "hv_heur": 299.121289,
-    "hv_gain": 389.415377,
-    "nd_exact_to_heur": 0.611673,
-    "nd_heur_to_exact": 0.545231,
+    "hv_gain": 458.6606,
+    "nd_exact_to_heur": 0.512731,
+    "nd_heur_to_exact": 0.479639,
     "verdict_pass": true
   },
   "solver_requested": "auto",
   "gurobi_available": true,
-  "duration_s": 47.7
+  "duration_s": 61.2
 }

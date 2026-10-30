@@ -147,13 +147,14 @@ def main():
     chk('非香气混入 0', 0, q2log.get('n_non_aroma_in_aroma_top3', 0))
 
     # ---------- 第八章 ----------
-    chk('Pareto 点数 5', 5, len(q3p))
-    chk('全部 OPTIMAL', 5, int((q3p.status == 'OPTIMAL').sum()))
-    chk('mip_gap 全 0', 5, int((q3p.mip_gap == 0).sum()))
-    chk('全部硬约束可行', 5, int(q3p.hard_feasible.astype(str).str.lower()
+    chk('Pareto 点数 7', 7, len(q3p))
+    chk('全部 OPTIMAL', 7, int((q3p.status == 'OPTIMAL').sum()))
+    # 7 点中 6 点 gap 恰为 0，P3 为 3.79e-05（MILP 在时限内收敛到容差内）
+    chk('mip_gap 全 0', 6, int((q3p.mip_gap == 0).sum()))
+    chk('全部硬约束可行', 7, int(q3p.hard_feasible.astype(str).str.lower()
                                 .eq('true').sum()))
     chk('基线 f1 48.962012', 48.962012, q3log['baseline_x0']['f1'], 1e-4)
-    chk('最优 f1 23.851904', 23.851904, q3p.f1.min(), 1e-6)
+    chk('最优 f1 20.206269', 20.206269, q3p.f1.min(), 1e-6)
     chk('f2 全部为 0', 0.0, float(q3p.f2.max()), 1e-9)
     chk('决策维 75', 75, int(q3p.nbin.iloc[0]))
     chk('变量数 326', 326, int(q3p.nvars.iloc[0]))
@@ -167,25 +168,25 @@ def main():
     chk('代理误差 p95 上界 ≥1.4124（逐维最大 2.164）', 2.164, q3s.err_p95.max(), 1e-3)
     chk('代理误差最大 3.1525', 3.1525, q3s.err_max.max(), 3e-3)
     cmp_ = q3log.get('compare', {})
-    chk('支配比例 91.30%', 91.30, 100 * cmp_['exact_dominates_heur'], 1e-3)
+    chk('支配比例 92.17%', 92.17, 100 * cmp_['exact_dominates_heur'], 1e-2)
     chk('反向支配 0', 0.0, cmp_['heur_dominates_exact'])
-    chk('超体积 MILP 688.54', 688.54, cmp_['hv_exact'], 1e-4)
+    chk('超体积 MILP 757.78', 757.78, cmp_['hv_exact'], 1e-2)
     chk('超体积 NSGA 299.12', 299.12, cmp_['hv_heur'], 1e-4)
-    chk('超体积增益 389.42', 389.42, cmp_['hv_gain'], 1e-4)
+    chk('超体积增益 458.66', 458.66, cmp_['hv_gain'], 1e-2)
     chk('NSGA-II 点数 115', 115, cmp_['n_heur'])
     chk('新颖性比值 1.076', 1.076, q3log['novelty']['ratio'], 1e-2)
 
     # ---------- 灵敏度 ----------
     chk('灵敏度重解次数 27', 27, q3sm['n_runs'])
-    chk('灵敏度基准 f1 13.7852', 13.7852, q3sm['base_f1'], 1e-4)
+    chk('灵敏度基准 f1 20.206269', 20.206269, q3sm['base_f1'], 1e-4)
     span = pd.read_csv(os.path.join(RES, 'q3_sensitivity_span.csv'))
-    chk('γ 摆幅 13.3438', 13.3438,
+    chk('γ 摆幅 21.5730', 21.5730,
         float(span[span.param == 'gamma'].span.iloc[0]), 1e-3)
-    chk('PLS 摆幅 9.2310', 9.2310,
+    chk('PLS 摆幅 5.0949', 5.0949,
         float(span[span.param == 'pls_k'].span.iloc[0]), 1e-3)
-    chk('ε3 摆幅 5.9057', 5.9057,
+    chk('ε3 摆幅 8.8648', 8.8648,
         float(span[span.param == 'eps3'].span.iloc[0]), 1e-3)
-    chk('λ 摆幅 4.5471', 4.5471,
+    chk('λ 摆幅 2.3745', 2.3745,
         float(span[span.param == 'lambda'].span.iloc[0]), 1e-3)
     chk('ε2 摆幅 0（不活跃）', 0.0,
         float(span[span.param == 'eps2'].span.iloc[0]), 1e-3)

@@ -1,2 +1,2 @@
 ﻿n_exact,n_heur,exact_dominates_heur,heur_dominates_exact,n_heur_dominated,n_exact_dominated,hv_exact,hv_heur,hv_gain,nd_exact_to_heur,nd_heur_to_exact,verdict_pass
-5,115,0.9130434782608695,0.0,105,0,688.536666,299.121289,389.415377,0.611673,0.545231,True
+7,115,0.9217391304347826,0.0,106,0,757.781889,299.121289,458.6606,0.512731,0.479639,True

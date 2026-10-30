@@ -58,6 +58,11 @@ def build_base(args):
     mu_s, cov_s, shrink_s, gen = q3.fit_generator(Xv[mask], rng, args['n_gen'])
     gen = np.clip(gen, lb, ub)
 
+    # ⚠ 必须与 q3.py 主流程一致：PLS 代理的训练集要裁到 MILP 可行域 [lb, ub]。
+    # 不裁的后果：线性浓度列（X2.methyltetrahydrofuran.3.one，std 795）独占协方差，
+    # 成分数塌缩、CV R² 转负，代理与主结果不是同一个；实测未裁时 f1=11.0431，
+    # 裁剪后与主流程同口径。
+    Xv = np.clip(Xv, lb, ub)
     C, B, k_best, cv_r2, cv_mse = q3.fit_pls_surrogate(Xv, Yv)
     sd = Yv.std(axis=0)
     sd = np.where(sd > 1e-9, sd, 1.0)
