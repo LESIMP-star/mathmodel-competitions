@@ -1,0 +1,64 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# ---------- 数据与结果（按需放开）----------
+# 赛题原始附件体积大且属于赛事方，不入库
+附件/
+data/raw/
+*.xlsx
+*.xls
+!shared/**/*.xlsx
+
+# 单文件超过 20MB 的中间结果
+*.parquet
+*.pkl
+*.h5
+
+# ---------- LaTeX ----------
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+*.loa
+*.lof
+*.lot
+main.pdf
+!docs/**/*.pdf
+
+# ---------- 编辑器与系统 ----------
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Gurobi ----------
+gurobi.log
+gurobi.log.*
+
+# ---------- 临时文件 ----------
+*.tmp
+*.bak
+scratch/
