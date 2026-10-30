@@ -705,15 +705,11 @@ def fig_q2_graph():
     ax.plot(d.tau, d.Q_null_p95, '--', lw=1.0, color=C_WARN)
     ax.plot(d.tau, d.spectral_Q_fix, '-s', ms=3.0, lw=1.1, color=C_GRAY,
             label='谱聚类（归一化 $L$）$Q$')
-    ax.axvline(s['main_tau'], ls=':', lw=1.0, color=C_DEEP)
-    # 标注挪到竖线左侧的空白里：原来放在 (τ+0.012, 0.30)，而零分布 95% 分位
-    # 那条橙色虚线是斜的（0.25→0.39），从文字左端下方穿到右端上方，整段字都被
-    # 斜线切过。新位置在虚线之下、灰色方块之上，两头都不碰。
-    ax.annotate(f'主阈值 $\\tau$={s["main_tau"]:.2f}',
-                xy=(s['main_tau'], 0.03),
-                xytext=(s['main_tau'] - 0.14, 0.055),
-                fontsize=6.4, color=C_DEEP,
-                arrowprops=dict(arrowstyle='-', lw=0.6, color=C_DEEP))
+    # C-3：参考线用图例，不要在图上写字。主阈值这条竖线原来是 annotate 在
+    # (τ-0.14, 0.055) 的说明文字，虽然挪开过，但仍是"在图上写字"；改成图例
+    # 条目（字没变），白底图例顺带挡住从它后面穿过的竖虚线。
+    ax.axvline(s['main_tau'], ls=':', lw=1.0, color=C_DEEP,
+               label=f'主阈值 $\\tau$={s["main_tau"]:.2f}')
     ax.set_xlabel('边阈值 $\\tau$（$|\\rho|\\geq\\tau$）', fontsize=8.4)
     ax.set_ylabel('模块度 $Q$', fontsize=8.4)
     ax.tick_params(labelsize=7.4)
@@ -735,9 +731,9 @@ def fig_q2_graph():
             label='谱聚类（归一化 $L$）')
     ax.plot(x, d.within_between_louvain, '-s', ms=3.0, lw=1.3, color=C_BLUE,
             label='Louvain')
-    ax.axhline(1.0, ls=':', lw=1.0, color=C_DEEP)
-    # y=1.03 时 6.4 pt 字的下缘正好压在这条 y=1 的点线上，抬到 1.10 留出约 3 pt。
-    ax.text(0.1, 1.10, '比值 = 1（社区无信息）', fontsize=6.4, color=C_DEEP)
+    # C-3：同上，y=1 这条参考线改成图例条目，不再在图内写"比值 = 1"。
+    ax.axhline(1.0, ls=':', lw=1.0, color=C_DEEP,
+               label='比值 = 1（社区无信息）')
     ax.set_xticks(x)
     ax.set_xticklabels([f'{t:.2f}' for t in d.tau], fontsize=7.0, rotation=45)
     ax.set_xlabel('边阈值 $\\tau$', fontsize=8.4)
