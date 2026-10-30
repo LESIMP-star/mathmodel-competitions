@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 
 try:
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -18,11 +19,11 @@ ROOT = os.getcwd()
 WORK = r'E:\hermes\.hermes\cache\scratch\repo_push'
 DEST = os.path.join(WORK, 'competitions', '2026-mathorcup')
 
-# github.com 直连被加速器自签证书拦掉，ghproxy.net 可通过
-REPOS = [
-    'https://ghproxy.net/https://github.com/LESIMP-star/mathmodel-competitions.git',
-    'https://github.com/LESIMP-star/mathmodel-competitions.git',
-]
+# github.com 直连被加速器自签证书拦掉（schannel handshake 失败），
+# 但加 http.sslVerify=false 后直连可通；ghproxy 那条会弹凭据管理器窗口，
+# 在无终端的后台进程里必然失败（could not read Username），故不再用。
+PUSH_URL = 'https://github.com/LESIMP-star/mathmodel-competitions.git'
+REPOS = [PUSH_URL]
 
 
 def run(cmd, **kw):
@@ -38,13 +39,14 @@ def clone():
             func(path)
         shutil.rmtree(WORK, onexc=_f)
     for url in REPOS:
-        r = run(['git', 'clone', '--depth', '1', url, WORK])
+        r = run(['git', '-c', 'http.sslVerify=false', 'clone',
+                 '--depth', '1', url, WORK])
         if r.returncode == 0:
-            print(f'✓ clone  {url.split("//")[1][:40]}')
+            print(f'✓ clone  {url.split("//")[1][:46]}')
             return url
-        print(f'  × clone 失败（{url[:46]}）: '
+        print(f'  × clone 失败: '
               f'{(r.stderr or "").strip().splitlines()[-1][:90] if r.stderr else ""}')
-    raise SystemExit('clone 全部失败')
+    raise SystemExit('clone 失败')
 
 
 USED = clone()
@@ -200,26 +202,45 @@ print('✓ README.md')
 os.chdir(WORK)
 run(['git', 'config', 'user.name', 'LESIMP-star'])
 run(['git', 'config', 'user.email', '2220695796@qq.com'])
+st = run(['git', 'reset'])
 run(['git', 'add', '-A'])
 st = run(['git', 'status', '--short'])
-nadd = len([l for l in (st.stdout or '').splitlines() if l.strip()])
+lines = [l for l in (st.stdout or '').splitlines() if l.strip()]
+nadd = len(lines)
 print(f'\n待提交 {nadd} 项')
+for l in lines[:12]:
+    print(f'  {l}')
+if nadd > 12:
+    print(f'  … 另有 {nadd - 12} 项')
 
-msg = ('mathorcup: 同步 Q3 目标口径修复与全链路数字\n\n'
-       '- q3.py: f3 的线性目标补 wj 归一（与 ε3 约束、metrics_of 同口径）\n'
-       '- q3.py: 增广项 c_aug 同步乘 wj\n'
-       '- robustness_q3.py: PLS 训练集裁剪到 [p1,p99]，与主流程一致\n'
-       '- 结果：Pareto 5→7 点，最优 f1 23.8519→20.2063，降幅 51.3%→58.7%\n'
-       '- 图：21 张全部按新结果重绘\n'
-       '- 文档：修复说明（问题一/问题三）、六条意见判定、队友画图任务、赛题要求核对表')
-r = run(['git', 'commit', '-m', msg])
-print((r.stdout or '').strip()[:400] or (r.stderr or '')[:400])
+if nadd == 0:
+    print('无改动，直接检查推送状态')
+else:
+    msg = ('mathorcup: 同步 Q3 目标口径修复与全链路数字\n\n'
+           '- q3.py: f3 的线性目标补 wj 归一（与 ε3 约束、metrics_of 同口径）\n'
+           '- q3.py: 增广项 c_aug 同步乘 wj\n'
+           '- robustness_q3.py: PLS 训练集裁剪到 [p1,p99]，与主流程一致\n'
+           '- 结果：Pareto 5→7 点，最优 f1 23.8519→20.2063，降幅 51.3%→58.7%\n'
+           '- 图：21 张全部按新结果重绘\n'
+           '- 文档：修复说明（问题一/问题三）、六条意见判定、队友画图任务、'
+           '赛题要求核对表')
+    r = run(['git', 'commit', '-m', msg])
+    print((r.stdout or '').strip()[:500] or (r.stderr or '')[:500])
 
-for url in [USED] + [u for u in REPOS if u != USED]:
-    r = run(['git', 'push', 'origin', 'HEAD:main'])
+pushed = False
+for attempt in range(1, 4):
+    r = run(['git', '-c', 'http.sslVerify=false', 'push',
+             PUSH_URL, 'HEAD:main'])
     if r.returncode == 0:
-        print(f'✓ push 成功')
+        print(f'✓ push 成功（第 {attempt} 次尝试）')
+        print((r.stderr or '').strip()[-300:])
+        pushed = True
         break
-    print(f'  × push 失败: {(r.stderr or "").strip()[-200:]}')
+    print(f'  × 第 {attempt} 次失败: {(r.stderr or "").strip()[-160:]}')
+    time.sleep(3)
+
+if not pushed:
+    print('!! push 全部失败')
 
 os.chdir(ROOT)
+sys.exit(0 if pushed else 1)
