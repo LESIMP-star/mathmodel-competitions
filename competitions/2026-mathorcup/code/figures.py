@@ -227,7 +227,12 @@ def fig_q0_box_before_after():
             ax.set_ylabel('原始浓度', fontsize=11)
         else:
             ax.set_ylabel('$\\log_{10}$(浓度)', fontsize=11)
-        ax.tick_params(axis='x', labelsize=9, rotation=20)
+        # 6 个中文类别名在同一块 142 pt 宽的轴里只有 23.7 pt 间距，而"2,3-丁二酮"
+        # 单行就占 46.8 pt。原来用 20°，相邻两条标签基线的垂直间距只有
+        # 23.7*sin20° = 8.1 pt，小于 9 pt 字高，所以"2,3-丁二酮/芳樟醇"、
+        # "丁酸乙酯/糠醛"、"香茅醇/α-蛇麻烯"三处压字（实测最差重叠 10.1 pt）。
+        # 45° 后垂直间距 16.8 pt，净空 6 pt；标签底端距图底 8.0 pt，不出界。
+        ax.tick_params(axis='x', labelsize=9, rotation=45)
         ax.tick_params(axis='y', labelsize=9)
         _style_ax(ax)
         add_panel_label(ax, '(a)' if stage == 'raw' else '(b)', x=-0.20, y=1.03, fontsize=11)
