@@ -287,7 +287,13 @@ def fig_q0_missing():
     ax = axes[1]
     ax.barh(np.arange(len(fl)), fl.mode_share * 100, color=C_WARN, height=0.66, alpha=0.88)
     ax.axvline(30, ls='--', lw=1.1, color=C_DEEP)
-    ax.text(31, len(fl) - 0.6, '30% 阈值', fontsize=9, color=C_DEEP, va='top')
+    # C-3：参考线不要在图上写字。"30% 阈值"原来标在顶部，正好压在最上面那根
+    # limonene 柱（93%）上，深蓝字压深橙柱几乎看不清。改成图例条目并放到轴外
+    # 上方——柱子最短的也有 48%，轴内右下放不下这么长的图例。
+    ax.legend(handles=[Line2D([], [], color=C_DEEP, ls='--', lw=1.1,
+                              label='30% 阈值')],
+              loc='lower right', bbox_to_anchor=(1.0, 1.01),
+              fontsize=9, frameon=False, borderaxespad=0.2)
     ax.set_yticks(np.arange(len(fl)))
     ax.set_yticklabels(fl.feat, fontsize=8.5)
     ax.set_xlabel('同一取值占比 (%)', fontsize=10.5)
